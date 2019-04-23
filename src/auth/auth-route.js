@@ -39,8 +39,6 @@ authRouter
                     })
             })
             .catch(next)
-
-        res.status(501)
     })
 
 authRouter
