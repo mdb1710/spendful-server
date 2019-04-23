@@ -5,7 +5,7 @@ const authRouter = express.Router()
 const bodyParser = express.json()
 
 authRouter
-    .post('/login', bodyParser, (req, res, next) => {
+    .post('/login', bodyParser, async (req, res, next) => {
         const { email, password } = req.body
         const loginUser = { email, password }
         for(const [key, value] of Object.entries(loginUser)){
@@ -14,31 +14,59 @@ authRouter
             }
         }
 
-        AuthService
-            .getUserbyUserEmail(req.app.get('db'), loginUser.email)
-            .then(user => {
-                if(!user){
-                    return res.status(400).json({error: 'Incorrect email or password'})
-                }
+        try {
+            const user =  await AuthService
+                .getUserbyUserEmail(req.app.get('db'), loginUser.email)
 
-                return AuthService
-                    .comparePassword(loginUser.password, user.password)
-                    .then(comparePasswords => {
-                        if(!comparePasswords){
-                            return res.status(400).json({error: 'Incorrect email or password'})
-                        }
+            if(!user){
+                return res.status(400).json({errors: ['Incorrect email or password']})
+            }
 
-                        const payload = {
-                            user_id: req.user.id,
-                            full_name: req.user.full_name
-                        }
+            const comparePasswords =  await AuthService
+                .comparePassword(loginUser.password, user.password)
 
-                        res.send({
-                            authToken: AuthService.createJwt(payload)
-                        })
-                    })
+            if(!comparePasswords){
+                return res.status(400).json({errors: ['Incorrect email or password']})
+            }
+
+            const payload = {
+                user_id: req.user.id,
+                full_name: req.user.full_name
+            }
+
+            res.send({
+                authToken: AuthService.createJwt(payload)
             })
-            .catch(next)
+
+        } catch(error){
+            next(error)
+        }
+
+        // AuthService
+        //     .getUserbyUserEmail(req.app.get('db'), loginUser.email)
+        //     .then(user => {
+        //         if(!user){
+        //             return res.status(400).json({error: 'Incorrect email or password'})
+        //         }
+
+        //         return AuthService
+        //             .comparePassword(loginUser.password, user.password)
+        //             .then(comparePasswords => {
+        //                 if(!comparePasswords){
+        //                     return res.status(400).json({error: 'Incorrect email or password'})
+        //                 }
+
+        //                 const payload = {
+        //                     user_id: req.user.id,
+        //                     full_name: req.user.full_name
+        //                 }
+
+        //                 res.send({
+        //                     authToken: AuthService.createJwt(payload)
+        //                 })
+        //             })
+        //     })
+        //     .catch(next)
     })
 
 authRouter
