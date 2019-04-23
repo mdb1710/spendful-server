@@ -27,7 +27,7 @@ incomeRouter
 
 incomeRouter
     get('/', (req, res, next) => {
-        const {} = req.body
+        incomeServive.
 
         res.status(501)
     })
