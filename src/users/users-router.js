@@ -16,7 +16,16 @@ usersRouter
             }
         })
 
-        
+        //validate password, if password invalid return status 400 with a coresponding error message
+
+        // check if email is taken, if so return 400 with error message
+
+        //else, hash the password and insert user to user table
+          // then return serialized user info 
+
+
+
+
         res.status(501)
     })
 

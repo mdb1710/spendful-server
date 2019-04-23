@@ -5,7 +5,7 @@ const authRouter = express.Router()
 const bodyParser = express.json()
 
 authRouter
-    .post('login', bodyParser, (req, res, next) => {
+    .post('/login', bodyParser, (req, res, next) => {
         const { email, password } = req.body
         const loginUser = { email, password }
         for(const [key, value] of Object.entries(loginUser)){
@@ -44,8 +44,7 @@ authRouter
     })
 
 authRouter
-    .post('refresh', requireAuth, (req, res, next) => {
-        // const subject = req.user.
+    .post('/refresh', requireAuth, (req, res, next) => {
         const payload = {
             user_id: req.user.id,
             full_name: req.user.full_name

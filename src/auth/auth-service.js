@@ -10,9 +10,9 @@ const AuthService = {
             .first()
     },
 
-    getUserbyFullname(db, full_name){
+    getUserbyUserId(db, id){
         return db('users')
-            .where({full_name})
+            .where({id})
             .first()
     },    
 
