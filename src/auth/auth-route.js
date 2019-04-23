@@ -1,6 +1,6 @@
 const express = require('express')
 const AuthService = require('./auth-service')
-const requireAuth = require('../middleware/jwt-auth')
+const {requireAuth} = require('../middleware/jwt-auth')
 const authRouter = express.Router()
 const bodyParser = express.json()
 
@@ -82,4 +82,4 @@ authRouter
     })
 
 
-module.express = authRouter
+module.exports = authRouter
