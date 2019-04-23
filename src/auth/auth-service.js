@@ -1,4 +1,4 @@
-const jwt = require()
+const jwt = require('jsonwebtoken')
 const config = require('../config')
 const bcrypt =  require('bcryptjs')
 
@@ -14,7 +14,7 @@ const AuthService = {
         return db('users')
             .where({id})
             .first()
-    },    
+    },
 
     comparePassword(password, hash){
         return bcrypt.compare(password, hash)
