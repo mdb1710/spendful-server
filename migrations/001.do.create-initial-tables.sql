@@ -27,7 +27,7 @@ CREATE TABLE users (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TRIGGER notes_updated_at
+CREATE TRIGGER users_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE PROCEDURE set_updated_at();
@@ -52,7 +52,7 @@ CREATE TABLE categories (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TRIGGER notes_updated_at
+CREATE TRIGGER categories_updated_at
 BEFORE UPDATE ON categories
 FOR EACH ROW
 EXECUTE PROCEDURE set_updated_at();
@@ -75,7 +75,7 @@ CREATE TABLE incomes (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TRIGGER notes_updated_at
+CREATE TRIGGER incomes_updated_at
 BEFORE UPDATE ON incomes
 FOR EACH ROW
 EXECUTE PROCEDURE set_updated_at();
@@ -97,7 +97,7 @@ CREATE TABLE expenses (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TRIGGER notes_updated_at
+CREATE TRIGGER expenses_updated_at
 BEFORE UPDATE ON expenses
 FOR EACH ROW
 EXECUTE PROCEDURE set_updated_at();
