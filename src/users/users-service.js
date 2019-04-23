@@ -27,7 +27,7 @@ const userService = {
             email: xss(user.email),
             full_name: xss(user.full_name),
             created_at: user.created_at,
-            updated_at: user.updated_at
+            updated_at: user.updated_a
         }
     },
 
