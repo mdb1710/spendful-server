@@ -1,5 +1,5 @@
 {
-  "name": "express-exercises",
+  "name": "spenduful-server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.0.0",
+    "mocha": "^6.1.4",
     "ndb": "^1.0.43",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2"
