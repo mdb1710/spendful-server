@@ -7,9 +7,9 @@ const bodyParser = express.json()
 
 usersRouter
     .post('/', bodyParser, async (req, res, next) => {
-        const { email, full_name, password } = req.body
-        const newUser = { email, full_name, password }
-        const fields = ['email', 'full_name', 'password']
+        const { email_address, full_name, password } = req.body
+        const newUser = { email_address, full_name, password }
+        const fields = ['email_address', 'full_name', 'password']
 
         fields.forEach(field => {
             if(!req.body[field]){
@@ -26,7 +26,7 @@ usersRouter
                 res.status(400).json({errors})
             }
     
-            const hasUserWithEmail = await userService.getUserByEmail(req.app.get('db'), newUser.email)
+            const hasUserWithEmail = await userService.getUserbyEmail(req.app.get('db'), newUser.email_address)
         
             if(hasUserWithEmail){
                 return res.status(400).json({errors: ['Email is already taken']})
@@ -36,9 +36,9 @@ usersRouter
                         .hashPassword(newUser.password)
                         
             const userToInsert = {
-                email: newUser.email,
+                email_address: newUser.email_address,
                 full_name: newUser.full_name,
-                password: hashedPassword
+                password_hash: hashedPassword
             }
     
             const user =  await userService
@@ -46,7 +46,7 @@ usersRouter
                                 
             res.status(201)
                 .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                .json(usersService.serializeUser(user))
+                .json(userService.serializeUser(user))
 
         } catch(error) {
             next(error)

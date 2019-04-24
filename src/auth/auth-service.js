@@ -4,9 +4,9 @@ const bcrypt =  require('bcryptjs')
 
 
 const AuthService = {
-    getUserbyUserEmail(db, email){
+    getUserbyUserEmail(db, email_address){
         return db('users')
-            .where({email})
+            .where({email_address})
             .first()
     },
 
