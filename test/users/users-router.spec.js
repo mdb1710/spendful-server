@@ -1,6 +1,5 @@
 /* global expect supertest*/
 'use strict';
-
 const joi = require('@hapi/joi');
 const knex = require('knex');
 const { PORT, DB_URL } = require('../../src/config');
@@ -14,6 +13,10 @@ before(() => {
   });
 
   app.set('db', db);
+});
+
+after(() => {
+  app.get('db').destroy();
 });
 
 describe('GET /api/users', () => {
@@ -43,27 +46,26 @@ describe('GET /api/users', () => {
 
 describe('POST /api/users', () => {
 
-  context('with invalid Authorization', () =>{
+  context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/users')
-        .set('Authorization', 'Bearer INVALID_TOKEN')
         .send({
-          full_name: 'John Doe',
-          email_address: 'jdoe@anon.com',
-          password: 'password',
+          foobar: 'foobar',
         })
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(400)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
-  });
-
-  context('with an invalid body', () =>{
 
     it.skip('should respond with an error (400)', () => {
 
@@ -77,25 +79,25 @@ describe('POST /api/users', () => {
         .expect(400)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
+          joi.assert(resp.body, schema);
         });
     });
   });
 
-  context('with valid Authorization and body', () =>{
+  context('with a valid body', () =>{
 
-    it.skip('should respond with a Location header and an empty body (201)', () => {
+    it('should respond with a Location header and an empty body (201)', () => {
 
       return supertest(app)
         .post('/api/users')
-        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .send({
-          full_name: 'John Doe',
-          email_address: 'jdoe@anon.com',
-          password: 'password',
+          full_name     : 'John Doe',
+          email_address : 'jdoe@anon.com',
+          password      : 'password',
         })
         .expect('Content-Type', /json/)
         .expect(201)
-        .expect('Authorization', /\/api\/users\//)
+        .expect('Location', /\/api\/users\//)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
         });
