@@ -19,6 +19,7 @@ usersRouter
 
         try{
             const validateUser = await userService.validateNewUser(newUser)
+
             if(validateUser !== null){
                 const errors = validateUser.details.map(err => {
                     return err.message
