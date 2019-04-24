@@ -21,6 +21,20 @@ const incomeService = {
             .returning('*')
             .then(([income]) => income)
             .then(income => this.getIncomeById(db, income.id))
+    },
+
+    deleteIncome(db, id){
+        return db('incomes')
+            .where({id})
+            .delete()
+    },
+
+    updateIncome(db, updateData, id){
+        return db('incomes')
+        .where({id})
+        .update(updateData)
+        .returning('*')
+        .then(([income]) => income)
     }
 }
 
