@@ -50,6 +50,38 @@ incomeRouter
             next(error)
         }
     })
+    .post('/', bodyParser, async (req, res, next) => {
+        try{
+            const { description, amount, recurring_rule} = req.body
+            const fields = ['description', 'amount']
+            const newIncome = { 
+                description, 
+                amount,
+                recurring_rule
+            }
+
+            fields.forEach(field => {
+                if(!req.body[field]){
+                   return res.status(400).json({errors: [`Missing ${field} in request body`]})
+                }
+            })
+
+            newIncome[owner_id] = req.user.id
+
+            const income = await incomeServive
+                .insertIncome(
+                    req.app.get('db'),
+                    newIncome
+                )
+
+            res.json(income)
+            next()
+        } catch(error){
+            next(error)
+        }
+    })
+
+incomeRouter
     .get('/:year', requireAuth, async (req, res, next) => {
         try{
             const year = req.params.year
@@ -81,6 +113,8 @@ incomeRouter
             next(error)
         }
     })
+
+incomeRouter
     .get('/:year/:month', requireAuth, (req, res, next) =>{
 
         try{
@@ -115,7 +149,7 @@ incomeRouter
             next(error)
         }
     })
-    .post('/', bodyParser, async (req, res, next) => {
-        const { description, amount, recurring_rule} = req.body
-        res.status(501)
-    })
+
+
+module.exports = incomeRouter
+ 

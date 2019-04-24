@@ -8,7 +8,7 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config')
 const authRouter = require('./auth/auth-route')
 const usersRouter = require('./users/users-router')
-
+const incomeRouter = require('./income/income-router')
 const app = express();
 
 const morganOption = (NODE_ENV === 'production')
@@ -22,6 +22,7 @@ app.use(helmet());
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/incomes', incomeRouter)
 // app.get('/', (req, res) => {
 //   res.send('Hello, boilerplate!');
 // });

@@ -20,6 +20,22 @@ const incomeServive = {
             .where({owner_id})
             .andWhere(db.raw('cast(EXTRACT(YEAR from created_at) as integer)', '=', year))
             .andWhere(db.raw('cast(EXTRACT(MONTH from created_at) as integer)', '=', month))
+    },
+
+    getIncomeById(db, id){
+        return db('incomes')
+            .select('*')
+            .where({id})
+            .first()
+    },
+
+    insertIncome(db, income){
+        return db
+            .insert(income)
+            .into('incomes')
+            .returning('*')
+            .then(([income]) => income)
+            .then(income => this.getIncomeById(db, income.id))
     }
 }
 
