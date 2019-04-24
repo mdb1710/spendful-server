@@ -67,7 +67,7 @@ describe('POST /api/users', () => {
         });
     });
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/users')
@@ -78,7 +78,11 @@ describe('POST /api/users', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
           joi.assert(resp.body, schema);
         });
     });
@@ -93,7 +97,7 @@ describe('POST /api/users', () => {
         .send({
           full_name     : 'John Doe',
           email_address : 'jdoe@anon.com',
-          password      : 'password',
+          password      : 'LongerPassword',
         })
         .expect('Content-Type', /json/)
         .expect(201)
