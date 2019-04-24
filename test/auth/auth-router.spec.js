@@ -9,7 +9,7 @@ describe('POST /api/auth/login', () => {
 
   context('with invalid body (or credentials)', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/auth/login')
@@ -27,7 +27,7 @@ describe('POST /api/auth/login', () => {
 
   context('with valid body (and credentials)', () =>{
 
-    it.skip('should respond with an auth token (200)', () => {
+    it('should respond with an auth token (200)', () => {
 
       return supertest(app)
         .post('/api/auth/login')
@@ -54,7 +54,7 @@ describe('GET /api/auth/refresh', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/auth/refresh')
@@ -69,7 +69,7 @@ describe('GET /api/auth/refresh', () => {
 
   context('with valid Authorization', () =>{
 
-    it.skip('should respond with an auth token (200)', () => {
+    it('should respond with an auth token (200)', () => {
 
       return supertest(app)
         .get('/api/auth/refresh')
