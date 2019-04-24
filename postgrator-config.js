@@ -8,5 +8,5 @@ module.exports = {
   host               : process.env.DB_MIGRATION_HOST,
   port               : process.env.DB_MIGRATION_PORT,
   database           : process.env.DB_MIGRATION_DATABASE,
-  ssl                : true,
+  // ssl                : true,
 };

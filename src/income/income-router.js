@@ -53,7 +53,7 @@ incomeRouter
     .get('/:year', requireAuth, async (req, res, next) => {
         try{
             const year = req.params.year
-            const incomesForYear = incomeServive
+            const incomesForYear = await incomeServive
                 .getIncomesByYear(
                     req.app.get('db'),
                     Number(year), 
@@ -87,7 +87,7 @@ incomeRouter
             const year = req.params.year
             const month = req.params.month
 
-            const incomesForMonth = incomeServive
+            const incomesForMonth = await incomeServive
                 .getIncomesByYearAndMonth(
                     req.app.get('db'),
                     Number(year),
@@ -115,7 +115,7 @@ incomeRouter
             next(error)
         }
     })
-    .post('/', bodyParser, (req, res, next) => {
+    .post('/', bodyParser, async (req, res, next) => {
         const { description, amount, recurring_rule} = req.body
         res.status(501)
     })
