@@ -24,6 +24,8 @@ VALUES
       '$2y$12$q0r2E7xxZJT66HT5zb6yoeemlVUYy400SsXh3XRBNIJb1zuuuHhKu'
 );
 
+ALTER SEQUENCE IF EXISTS users_id_seq RESTART WITH 4;
+
 INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
   VALUES
     (
@@ -97,6 +99,8 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
         500000.00
     );
 
+ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 11;
+
 INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount", "recurring_rule")
   VALUES
     (
@@ -123,6 +127,8 @@ INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount",
         250500.00,
         null
     );
+
+ALTER SEQUENCE IF EXISTS incomes_id_seq RESTART WITH 4;
 
 INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount", "recurring_rule")
   VALUES
@@ -188,5 +194,6 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
 RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     );
 
+ALTER SEQUENCE IF EXISTS expenses_id_seq RESTART WITH 8;
 
  COMMIT;
