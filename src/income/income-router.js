@@ -1,6 +1,7 @@
 const express = require('express')
-const requireAuth = require('../middleware/jwt-auth')
+const { requireAuth } = require('../middleware/jwt-auth')
 const incomeServive = require('./income-service')
+
 const incomeRouter = express.Router()
 const bodyParser = express.json()
 
@@ -26,7 +27,7 @@ const bodyParser = express.json()
 //   })
 
 incomeRouter
-    get('/', requireAuth, async(req, res, next) => {
+    .get('/', requireAuth, async(req, res, next) => {
         try{
             const incomes = await incomeServive
                 .getAllIncomes(req.app.get('db'), req.user.id)
@@ -115,7 +116,7 @@ incomeRouter
     })
 
 incomeRouter
-    .get('/:year/:month', requireAuth, (req, res, next) =>{
+    .get('/:year/:month', requireAuth, async(req, res, next) =>{
 
         try{
             const year = req.params.year
