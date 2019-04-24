@@ -98,7 +98,9 @@ describe('POST /api/users', () => {
         .post('/api/users')
         .send({
           full_name     : 'John Doe',
-          email_address : 'jdoe@anon.com',
+          // FIXME using Date.now() is a hack because we aren't currently
+          // seeding and un-seeding a test database yet
+          email_address : `jdoe${Date.now()}@anon.com`,
           password      : 'LongerPassword',
         })
         .expect('Content-Type', /json/)
