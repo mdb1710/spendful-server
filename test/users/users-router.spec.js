@@ -1,7 +1,23 @@
 /* global expect supertest*/
 'use strict';
-
+const joi = require('@hapi/joi');
+const knex = require('knex');
+const { PORT, DB_URL } = require('../../src/config');
 const app = require('../../src/app');
+
+before(() => {
+
+  const db = knex({
+    client: 'pg',
+    connection: DB_URL
+  });
+
+  app.set('db', db);
+});
+
+after(() => {
+  app.get('db').destroy();
+});
 
 describe('GET /api/users', () => {
 
@@ -30,32 +46,65 @@ describe('GET /api/users', () => {
 
 describe('POST /api/users', () => {
 
-  context('with invalid Authorization', () =>{
+  context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
-        .get('/api/users')
-        .set('Authorization', 'Bearer INVALID_TOKEN')
+        .post('/api/users')
+        .send({
+          foobar: 'foobar',
+        })
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(400)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
+    });
+
+    it('should respond with an error (400)', () => {
+
+      return supertest(app)
+        .post('/api/users')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .send({
+          foobar: 'invalid',
+        })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .then(resp => {
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
 
-  context('with an invalid body', () =>{
+  context('with a valid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
-      expect(false).to.be.true();
-    });
-  });
+    it('should respond with a Location header and an empty body (201)', () => {
 
-  context('with valid Authorization and body', () =>{
-
-    it.skip('should respond with a Location header and an empty body (201)', () => {
-      expect(false).to.be.true();
+      return supertest(app)
+        .post('/api/users')
+        .send({
+          full_name     : 'John Doe',
+          email_address : 'jdoe@anon.com',
+          password      : 'LongerPassword',
+        })
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .expect('Location', /\/api\/users\//)
+        .then(resp => {
+          // TODO joi.assert(resp, someSchema);
+        });
     });
   });
 });

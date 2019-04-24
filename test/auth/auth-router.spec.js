@@ -15,6 +15,10 @@ before(() => {
   app.set('db', db);
 });
 
+after(() => {
+  app.get('db').destroy();
+});
+
 // TODO MVP
 describe('POST /api/auth/login', () => {
 
@@ -31,7 +35,12 @@ describe('POST /api/auth/login', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
@@ -73,7 +82,12 @@ describe('GET /api/auth/refresh', () => {
         .expect('Content-Type', /json/)
         .expect(401)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
