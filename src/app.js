@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 
 require('dotenv').config();
 const express = require('express');
@@ -12,9 +12,22 @@ const incomeRouter = require('./income/income-router')
 const expenseRouter = require('./expense/expense-route')
 const app = express();
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+let morganOption = 'common';
+
+switch (NODE_ENV) {
+
+  case 'production':
+    morganOption = 'tiny';
+    break;
+
+  case 'development':
+    morganOption = 'common';
+    break;
+
+  case 'test':
+    morganOption = () => {};  // none
+    break;
+}
 
 app.use(morgan(morganOption));
 app.use(cors());
