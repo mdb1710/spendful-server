@@ -66,14 +66,16 @@ describe('POST /api/users', () => {
           joi.assert(resp.body, schema);
         });
     });
+  });
 
-    it('should respond with an error (400)', () => {
+  context('with email address already in database', () => {
+
+    it.skip('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/users')
-        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .send({
-          foobar: 'invalid',
+          // ?????
         })
         .expect('Content-Type', /json/)
         .expect(400)
