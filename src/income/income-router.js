@@ -1,6 +1,6 @@
 const express = require('express')
 const { requireAuth } = require('../middleware/jwt-auth')
-const incomeServive = require('./income-service')
+const incomeService = require('./income-service')
 
 const incomeRouter = express.Router()
 const bodyParser = express.json()
@@ -8,7 +8,7 @@ const bodyParser = express.json()
 incomeRouter
     .get('/', requireAuth, async(req, res, next) => {
         try{
-            const incomes = await incomeServive
+            const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
 
             if(incomes.length === 0){
@@ -42,7 +42,7 @@ incomeRouter
 
             newIncome[owner_id] = req.user.id
 
-            const income = await incomeServive
+            const income = await incomeService
                 .insertIncome(
                     req.app.get('db'),
                     newIncome
@@ -56,55 +56,29 @@ incomeRouter
     })
 
 incomeRouter
-    .get('/:year', requireAuth, async (req, res, next) => {
+    .get('/:id', requireAuth, async(req, res, next) => {
         try{
-            const year = req.params.year
-            const incomesForYear = await incomeServive
-                .getIncomesByYear(
+            const incomeId = req.params.id
+
+            const income = await incomeService
+                .getIncomeById(
                     req.app.get('db'),
-                    Number(year), 
-                    req.user.id
-                )
-
-            if(incomesForYear.length === 0){
-                return res.status(404).json({
-                    errors: [`No incomes exist in the year`],
-                })
-            }
-
-            res.json(incomesForYear)
-            next()
-        }catch(error){
-            next(error)
-        }
-    })
-
-incomeRouter
-    .get('/:year/:month', requireAuth, async(req, res, next) =>{
-
-        try{
-            const { month, year }= req.params
-
-            const incomesForMonth = await incomeServive
-                .getIncomesByYearAndMonth(
-                    req.app.get('db'),
-                    Number(year),
-                    Number(month),
-                    req.user.id
+                    incomeId
                 )
             
-            if(incomesForMonth.length === 0){
-                return res.status(404).json({
-                    errors: [`No incomes exist for the Month`],
-                })
+            if(!income){
+                return res.status(400).json({errors: [`Income doesn't exist`]})
             }
 
-            res.json(incomesForMonth)
+            res.json(income)
             next()
         }catch(error){
             next(error)
         }
     })
+
+
+
 
 
 module.exports = incomeRouter

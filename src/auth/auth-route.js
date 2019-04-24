@@ -15,6 +15,7 @@ authRouter
         }
 
         try {
+            // console.log(req.app.get('db'))
             const user =  await AuthService
                 .getUserbyUserEmail(req.app.get('db'), loginUser.email_address)
 
@@ -35,7 +36,7 @@ authRouter
             }
 
             res.json({
-                authToken: AuthService.createJwt(payload)
+                token: AuthService.createJwt(payload)
             })
 
         } catch(error){
@@ -70,13 +71,13 @@ authRouter
     })
 
 authRouter
-    .post('/refresh', requireAuth, (req, res, next) => {
+    .get('/refresh', requireAuth, (req, res, next) => {
         const payload = {
             user_id: req.user.id,
             full_name: req.user.full_name
         }
         res.json({
-            authToken: AuthService.createJwt(payload)
+            token: AuthService.createJwt(payload)
         })
         next()
     })
