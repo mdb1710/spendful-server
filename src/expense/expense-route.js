@@ -1,25 +1,25 @@
 const express = require('express')
 const { requireAuth } = require('../middleware/jwt-auth')
-const incomeService = require('./income-service')
+const expenseService = require('./expense-service')
 
-const incomeRouter = express.Router()
+const expenseRouter = express.Router()
 const bodyParser = express.json()
 
-incomeRouter
+expenseRouter
     .route('/')
     .all(requireAuth)
     .get(async(req, res, next) => {
         try{
-            const incomes = await incomeService
-                .getAllIncomes(req.app.get('db'), req.user.id)
+            const expenses = await expenseService
+                .getAllExpenses(req.app.get('db'), req.user.id)
 
-            if(incomes.length === 0){
+            if(expenses.length === 0){
                 return res.status(404).json({
-                    errors: [`No incomes found`],
+                    errors: [`No expenses found`],
                 })
             }
 
-            res.json(incomes)
+            res.json(expenses)
             next()
         } catch(error) {
             next(error)
@@ -29,7 +29,7 @@ incomeRouter
         try{
             const { category_id, description, amount, recurring_rule} = req.body
             const fields = ['category_id', 'description', 'amount']
-            const newIncome = {
+            const newExpense = {
                 category_id: Number(category_id), 
                 description, 
                 amount,
@@ -38,32 +38,32 @@ incomeRouter
 
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
-                   return res.status(400).json({errors: [`Missing ${field[i]} in request body`]})
+                   return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
                 }
             }
 
-            newIncome[owner_id] = req.user.id
+            newExpense[owner_id] = req.user.id
 
-            const income = await incomeService
-                .insertIncome(
+            const expense = await expenseService
+                .insertExpense(
                     req.app.get('db'),
-                    newIncome
+                    newExpense
                 )
 
-            res.json(income)
+            res.json(expense)
             next()
         } catch(error){
             next(error)
         }
     })
 
-incomeRouter
+expenseRouter
     .route('/:id')
     .all(requireAuth)
-    .all(isIncomeExist)
+    .all(isExpenseExist)
     .get(async(req, res, next) => {
         try{
-            res.json(res.income)
+            res.json(res.expense)
             next()
         }catch(error){
             next(error)
@@ -71,8 +71,8 @@ incomeRouter
     })
     .delete(async(req, res, next) => {
         try{
-            await incomeService
-                .deleteIncome(
+            await expenseService
+                .deleteExpense(
                     req.app.get('db'),
                     req.params.id
                 )
@@ -85,14 +85,14 @@ incomeRouter
     })
     .patch(bodyParser, async(req, res, next) => {
         try{ 
-            const updatedIncome = await incomeService
-                .updateIncome(
+            const updatedExpense = await expenseService
+                .updateExpense(
                     req.app.get('db'), 
                     req.body, 
                     req.params.id
                 )
           
-            res.json(updatedIncome)
+            res.json(updatedExpense)
             next()
         } catch(error){
             next(error)
@@ -100,21 +100,21 @@ incomeRouter
     })
 
 
-async function isIncomeExist(req, res, next){
+async function isExpenseExist(req, res, next){
     try{
-        const income = await incomeService
-            .getIncomeById(
+        const expense = await expenseService
+            .getExpenseById(
                 req.app.get('db'),
                 req.params.id,
                 req.user.id
             )
         // console.log(income)
-        if(!income){
+        if(!expense){
             return res
                 .status(400)
-                .json({errors: [`Income doesn't exist`]})
+                .json({errors: [`Expense doesn't exist`]})
         }
-        res.income = income
+        res.expense = expense
         next()
     } catch (error) {
         next(error)
@@ -123,42 +123,4 @@ async function isIncomeExist(req, res, next){
 
 
 
-module.exports = incomeRouter
- 
-/*
-RESTful
-
-example car object
-  make: Honda
-  model: Civic
-
-every endpoint responds with one of
-  - car object
-  - array of car objects
-  - empty
-
----
-
-GET /cars
-  get array of car objects
-
-POST /cars
-  create a new car object
-
-  example request body
-    make: Toyota
-    model: Corolla
-
-GET /car/:id
-  get car object with matching :id
-
-PATCH /car/:id
-  update car object matching :id with info from body
-
-  example request body
-    model: Camry
-
-DELETE /car/:id
-
-  delete car object matching :id
-  */
+module.exports = expenseRouter
