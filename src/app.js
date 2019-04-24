@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 
 require('dotenv').config();
 const express = require('express');
@@ -6,20 +6,43 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config')
-
+const authRouter = require('./auth/auth-route')
+const usersRouter = require('./users/users-router')
+const incomeRouter = require('./income/income-router')
+const expenseRouter = require('./expense/expense-route')
 const app = express();
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+let morganOption = 'common';
+
+switch (NODE_ENV) {
+
+  case 'production':
+    morganOption = 'tiny';
+    break;
+
+  case 'development':
+    morganOption = 'common';
+    break;
+
+  case 'test':
+    morganOption = () => {};  // none
+    break;
+}
 
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
 
-app.get('/', (req, res) => {
-  res.send('Hello, boilerplate!');
-});
+
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/incomes', incomeRouter)
+app.use('/api/expenses', expenseRouter)
+// app.get('/', (req, res) => {
+//   res.send('Hello, boilerplate!');
+// });
+
+
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
