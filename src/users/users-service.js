@@ -5,7 +5,7 @@ const xss = require('xss')
 const userService = {
     validateNewUser(newUser){
         const schema = Joi.object({
-            email: Joi.string().email().required(),
+            email_address: Joi.string().email().required(),
             full_name: Joi.string().required(),
             password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
         })
@@ -24,16 +24,16 @@ const userService = {
 
     serializeUser(user){
         return {
-            email: xss(user.email),
+            email_address: xss(user.email_addressl),
             full_name: xss(user.full_name),
             created_at: user.created_at,
             updated_at: user.updated_a
         }
     },
 
-    getUserbyEmail(db, email){
+    getUserbyEmail(db, email_address){
         return db('users')
-            .where({email})
+            .where({email_address})
             .first()
             .then(user => !!user)
     },

@@ -5,27 +5,6 @@ const incomeServive = require('./income-service')
 const incomeRouter = express.Router()
 const bodyParser = express.json()
 
-
-// incomeRouter
-//   .use(requireAuth)
-//   .use(async (req, res, next) => {
-//     try {
-//       const incomes = await incomeServive
-//         .getIncomes(req.app.get('db'), req.user.id)
-
-//       if(!incomes){
-//           return res.status(404).json({
-//             errors: [`You don't have any incomes yet`],
-//           })
-//       }
-
-//       req.incomes = incomes
-//       next()
-//     } catch (error) {
-//       next(error)
-//     }
-//   })
-
 incomeRouter
     .get('/', requireAuth, async(req, res, next) => {
         try{
@@ -38,14 +17,7 @@ incomeRouter
                 })
             }
 
-            const totalIncome = incomes.reduce((total, current) => {
-                return total+=current.amount
-            }, 0)
-
-            res.json({
-                total: totalIncome,
-                incomesAll: incomes
-            })
+            res.json(incomes)
             next()
         } catch(error) {
             next(error)
@@ -53,9 +25,10 @@ incomeRouter
     })
     .post('/', bodyParser, async (req, res, next) => {
         try{
-            const { description, amount, recurring_rule} = req.body
+            const { category_id, description, amount, recurring_rule} = req.body
             const fields = ['description', 'amount']
-            const newIncome = { 
+            const newIncome = {
+                category_id: Number(category_id), 
                 description, 
                 amount,
                 recurring_rule
@@ -99,16 +72,7 @@ incomeRouter
                 })
             }
 
-            const totalIncome = incomesForYear.reduce((total, current) => {
-                return total+=current.amount
-            }, 0)
-
-            res.json({
-                year,
-                incomes: incomesForYear,
-                total: totalIncome 
-            })
-
+            res.json(incomesForYear)
             next()
         }catch(error){
             next(error)
@@ -119,8 +83,7 @@ incomeRouter
     .get('/:year/:month', requireAuth, async(req, res, next) =>{
 
         try{
-            const year = req.params.year
-            const month = req.params.month
+            const { month, year }= req.params
 
             const incomesForMonth = await incomeServive
                 .getIncomesByYearAndMonth(
@@ -135,16 +98,8 @@ incomeRouter
                     errors: [`No incomes exist for the Month`],
                 })
             }
-            const totalIncome = incomesForMonth.reduce((total, current) => {
-                return total+=current.amount
-            }, 0)
 
-            res.json({
-                year,
-                month,
-                incomes: incomesForMonth,
-                total: totalIncome
-            })
+            res.json(incomesForMonth)
             next()
         }catch(error){
             next(error)
@@ -154,3 +109,40 @@ incomeRouter
 
 module.exports = incomeRouter
  
+/*
+RESTful
+
+example car object
+  make: Honda
+  model: Civic
+
+every endpoint responds with one of
+  - car object
+  - array of car objects
+  - empty
+
+---
+
+GET /cars
+  get array of car objects
+
+POST /cars
+  create a new car object
+
+  example request body
+    make: Toyota
+    model: Corolla
+
+GET /car/:id
+  get car object with matching :id
+
+PATCH /car/:id
+  update car object matching :id with info from body
+
+  example request body
+    model: Camry
+
+DELETE /car/:id
+
+  delete car object matching :id
+  */
