@@ -6,7 +6,9 @@ const incomeRouter = express.Router()
 const bodyParser = express.json()
 
 incomeRouter
-    .get('/', requireAuth, async(req, res, next) => {
+    .route('/')
+    .all(requireAuth)
+    .get(async(req, res, next) => {
         try{
             const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
@@ -23,7 +25,7 @@ incomeRouter
             next(error)
         }
     })
-    .post('/', bodyParser, async (req, res, next) => {
+    .post(bodyParser, async (req, res, next) => {
         try{
             const { category_id, description, amount, recurring_rule} = req.body
             const fields = ['description', 'amount']
@@ -56,28 +58,68 @@ incomeRouter
     })
 
 incomeRouter
-    .get('/:id', requireAuth, async(req, res, next) => {
+    .route('/:id')
+    .all(requireAuth)
+    .all(isIncomeExist)
+    .get(async(req, res, next) => {
         try{
-            const incomeId = req.params.id
-
-            const income = await incomeService
-                .getIncomeById(
-                    req.app.get('db'),
-                    incomeId
-                )
-            
-            if(!income){
-                return res.status(400).json({errors: [`Income doesn't exist`]})
-            }
-
-            res.json(income)
+            res.json(res.income)
             next()
         }catch(error){
             next(error)
         }
     })
+    .delete(async(req, res, next) => {
+        try{
+            await incomeService
+                .deleteIncome(
+                    req.app.get('db'),
+                    req.params.id
+                )
+                .then(res => {
+                    res.status(204).end()  
+                })
+        } catch(error){
+            next(error)
+        }
+    })
+    .patch(bodyParser, async(req, res, next) => {
+        try{ 
+            const updatedIncome = await incomeService
+                .updateIncome(
+                    req.app.get('db'), 
+                    req.body, 
+                    req.params.id
+                )
+          
+            res.json(updatedIncome)
+            res.status(501)
+            next()
+        } catch(error){
+            next(error)
+        }
+    })
 
 
+async function isIncomeExist(req, res, next){
+    try{
+        const income = await incomeService
+            .getIncomeById(
+                req.app.get('db'),
+                req.params.id
+            )
+        // console.log(income)
+        if(!income){
+            return res
+                .status(400)
+                .json({errors: [`Income doesn't exist`]})
+        }
+        res.income = income
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 

@@ -11,12 +11,12 @@ usersRouter
         const newUser = { email_address, full_name, password }
         const fields = ['email_address', 'full_name', 'password']
 
-        fields.forEach(field => {
-            if(!req.body[field]){
+        for(let i=0; i<fields.length; i++){
+            if(!req.body[fields[i]]){
                 return res.status(400).json({ errors: [`Missing ${field} in request body`] })
             }
-        })
-
+        }
+ 
         try{
             const validateUser = await userService.validateNewUser(newUser)
             if(validateUser !== null){
