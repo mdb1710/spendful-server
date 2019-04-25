@@ -1,9 +1,11 @@
 /* global expect supertest*/
+
 'use strict';
-const joi = require('@hapi/joi');
-const knex = require('knex');
-const { PORT, DB_URL } = require('../../src/config');
-const app = require('../../src/app');
+
+const joi        = require('@hapi/joi');
+const knex       = require('knex');
+const { DB_URL } = require('../../src/config');
+const app        = require('../../src/app');
 
 before(() => {
 
