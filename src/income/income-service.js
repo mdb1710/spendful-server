@@ -13,6 +13,7 @@ const incomeService = {
             .where({id})
             .andWhere({owner_id})
             .first()
+            // .then(res => console.log(res))
     },
 
     insertIncome(db, income){
@@ -21,7 +22,7 @@ const incomeService = {
             .into('incomes')
             .returning('*')
             .then(([income]) => income)
-            .then(income => this.getIncomeById(db, income.id, income.owner_id))
+            // .then(income => this.getIncomeById(db, income.id, income.owner_id))
     },
 
     deleteIncome(db, id){
