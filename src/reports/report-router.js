@@ -9,6 +9,10 @@ reportRouter
     .get('/:year', requireAuth, async (req, res, next) => {
         try{
             const year = req.params.year
+
+            if(isNaN(parseInt(year, 10))){
+                return res.status(404).json({errors: ['Not a number']})
+            }
             const incomesForYear = await reportService
                 .getIncomesByYear(
                     req.app.get('db'),
@@ -23,21 +27,9 @@ reportRouter
                     req.user.id
                 )
 
-            if(incomesForYear.length === 0){
-                return res.status(404).json({
-                    errors: [`No incomes exist in the year`],
-                })
-            }
-
-            if(expensesForYear.length === 0){
-                return res.status(404).json({
-                    errors: [`No incomes exist in the year`],
-                })
-            }
-
             res.json({
-                incomes: incomesForYear,
-                expenses: expensesForYear
+                incomes: recurring(incomesForYear),
+                expenses: recurring(expensesForYear)
             })
             next()
         }catch(error){
@@ -47,9 +39,13 @@ reportRouter
 
 reportRouter
     .get('/:year/:month', requireAuth, async(req, res, next) =>{
+        const { month, year }= req.params
+
+        if(isNaN(parseInt(year, 10)) || isNaN(parseInt(month, 10))){
+            return res.status(404).json({errors: ['Not a number']})
+        }
 
         try{
-            const { month, year }= req.params
 
             const incomesForMonth = await reportService
                 .getIncomesByYearAndMonth(
@@ -59,15 +55,34 @@ reportRouter
                     req.user.id
                 )
             
-            if(incomesForMonth.length === 0){
-                return res.status(404).json({
-                    errors: [`No incomes exist for the Month`],
-                })
-            }
+            const expensesForMonth = await reportService
+                .getExpensesByYearAndMonth(
+                    req.app.get('db'),
+                    Number(year),
+                    Number(month),
+                    req.user.id
+                )
+            
 
-            res.json(incomesForMonth)
+            res.json({
+                incomes: recurring(incomesForMonth),
+                expenses: recurring(expensesForMonth)
+            })
             next()
         }catch(error){
             next(error)
         }
     })
+
+
+function recurring(data){
+    const regexs = /\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/
+    data.forEach(item => {
+        if(item.recurring_rule !== null){
+            item.recurring_rule = item.recurring_rule.match(regexs)[0]
+        }
+    })
+    return data
+}
+
+module.exports = reportRouter
