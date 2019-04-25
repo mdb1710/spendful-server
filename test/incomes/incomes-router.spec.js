@@ -23,7 +23,7 @@ describe('GET /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it.('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/incomes')
@@ -43,7 +43,7 @@ describe('GET /api/incomes', () => {
 
   context('with valid Authorization', () =>{
 
-    it.skip('should respond with an array of incomes (200)', () => {
+    it.('should respond with an array of incomes (200)', () => {
 
       return supertest(app)
         .get('/api/incomes')
@@ -66,7 +66,7 @@ describe('POST /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it.('should respond with an error (401)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -93,7 +93,7 @@ describe('POST /api/incomes', () => {
 
   context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it.('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -116,7 +116,7 @@ describe('POST /api/incomes', () => {
 
   context('with valid Authorization and body', () =>{
 
-    it.skip('should respond with a Location header and an empty body (201)', () => {
+    it.('should respond with a Location header and an empty body (201)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -141,7 +141,7 @@ describe('GET /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it.('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/incomes/1')
@@ -161,7 +161,7 @@ describe('GET /api/incomes/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it.('should respond with an error (404)', () => {
 
       return supertest(app)
         .get('/api/incomes/INVALID')
@@ -181,7 +181,7 @@ describe('GET /api/incomes/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with the specified income (200)', () => {
+    it.('should respond with the specified income (200)', () => {
 
       return supertest(app)
         .get('/api/incomes/1')
@@ -204,7 +204,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it.('should respond with an error (401)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -227,7 +227,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it.('should respond with an error (404)', () => {
 
       return supertest(app)
         .patch('/api/incomes/INVALID')
@@ -250,7 +250,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it.('should respond with an error (400)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -273,7 +273,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with valid Authorization, :id, and body', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it.('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -294,7 +294,7 @@ describe('DELETE /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it.('should respond with an error (401)', () => {
 
       return supertest(app)
         .delete('/api/incomes/1')

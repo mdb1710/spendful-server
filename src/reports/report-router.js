@@ -79,9 +79,7 @@ function recurring(data){
     const regexs = /\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/
     data.forEach(item => {
         if(item.recurring_rule !== null){
-
             const matches = regexs.exec(item.recurring_rule);
-
             if (matches) {
                 item.recurring_rule = matches[0];
             }
