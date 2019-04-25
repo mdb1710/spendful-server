@@ -18,7 +18,7 @@ incomeRouter
                     errors: [`No incomes found`],
                 })
             }
-          
+
             res.json(incomes)
             next()
         } catch(error) {
@@ -27,13 +27,14 @@ incomeRouter
     })
     .post(bodyParser, async (req, res, next) => {
         try{
-            const { category_id, description, amount, recurring_rule} = req.body
-            const fields = ['category_id', 'description', 'amount']
+            const { category_id, description, amount, start_date, recurring_rule} = req.body
+            const fields = ['category_id', 'description', 'amount', 'start_date']
             const newIncome = {
                 owner_id: req.user.id,
-                category_id: Number(category_id), 
-                description, 
+                category_id: Number(category_id),
+                description,
                 amount,
+                start_date,
                 recurring_rule
             }
 
@@ -63,6 +64,9 @@ incomeRouter
     .get(async(req, res, next) => {
         try{
             // console.log(res.income)
+            if (!res.income) {
+                return res.status(404).json({ errors: ['income not found'] });
+            }
             res.json(res.income)
             next()
         }catch(error){
@@ -76,22 +80,22 @@ incomeRouter
                     req.app.get('db'),
                     req.params.id
                 )
-        
+
             res.status(204).end()
-            next()  
+            next()
         } catch(error){
             next(error)
         }
     })
     .patch(bodyParser, async(req, res, next) => {
-        try{ 
+        try{
             await incomeService
                 .updateIncome(
-                    req.app.get('db'), 
-                    req.body, 
+                    req.app.get('db'),
+                    req.body,
                     req.params.id
                 )
-          
+
             res.status(204).end()
             // res.status(204).json(updatedIncome)
             next()
@@ -114,13 +118,6 @@ async function isIncomeExist(req, res, next){
                 req.user.id
             )
 
-        // console.log(income)
-        if(!income){
-            return res
-                .status(400)
-                .json({errors: [`Income doesn't exist`]})
-        }
-        
         res.income = income
         next()
     } catch (error) {
@@ -131,4 +128,3 @@ async function isIncomeExist(req, res, next){
 
 
 module.exports = incomeRouter
- 

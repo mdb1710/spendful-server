@@ -101,7 +101,7 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
 
 ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 11;
 
-INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount", "recurring_rule")
+INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount", "start_date", "recurring_rule")
   VALUES
     (
         1,
@@ -109,6 +109,7 @@ INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount",
         6,
         'Direct Deposit',
         2500.00,
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
         null
     ),
     (
@@ -117,6 +118,7 @@ INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount",
         7,
         'Paycheck',
         3500.00,
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
         null
     ),
     (
@@ -125,12 +127,13 @@ INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount",
         8,
         'Direct Deposit',
         250500.00,
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
         null
     );
 
 ALTER SEQUENCE IF EXISTS incomes_id_seq RESTART WITH 4;
 
-INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount", "recurring_rule")
+INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount", "start_date", "recurring_rule")
   VALUES
     (
         1,
@@ -138,8 +141,8 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         1,
         'Rent',
         1200.00,
-        'DTSTART:20181001T000000Z
-RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
+        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     ),
     (
         2,
@@ -147,8 +150,8 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         2,
         'Netflix',
         20.00,
-        'DTSTART:20181201T000000Z
-RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
+        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     ),
     (
         3,
@@ -156,6 +159,7 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         3,
         'Car Repairs',
         580.00,
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
         null
     ),
     (
@@ -164,8 +168,8 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         4,
         'Car Insurance',
         350.00,
-        'DTSTART:20181201T000000Z
-RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
+        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     ),
     (
         5,
@@ -173,6 +177,7 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         5,
         'Groceries',
         250.00,
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
         null
     ),
     (
@@ -181,8 +186,8 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         8,
         'Motorcycle',
         3500.00,
-        'DTSTART:20190101T000000Z
-RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
+        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     ),
     (
         7,
@@ -190,8 +195,8 @@ RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
         10,
         'Office Space',
         500000.00,
-        'DTSTART:20190301T000000Z
-RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        make_timestamptz(2019, 1, 1, 0, 0, 0),
+        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
     );
 
 ALTER SEQUENCE IF EXISTS expenses_id_seq RESTART WITH 8;

@@ -75,6 +75,7 @@ describe('POST /api/expenses', () => {
           category_id: 1,
           description: 'This months rent',
           amount: 299.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           // This value will be translated into an RRule for the DB
           recurring_rule: 'Monthly',
@@ -123,10 +124,10 @@ describe('POST /api/expenses', () => {
         .post('/api/expenses')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .send({
-          owner_id: 1,
           category_id: 1,
           description: 'This months rent',
           amount: 299.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           // This value will be translated into an RRule for the DB
           recurring_rule: 'Monthly',
