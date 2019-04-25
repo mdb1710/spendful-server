@@ -1,9 +1,11 @@
 /* global expect supertest*/
+
 'use strict';
-const joi = require('@hapi/joi');
-const knex = require('knex');
-const { PORT, DB_URL } = require('../../src/config');
-const app = require('../../src/app');
+
+const joi        = require('@hapi/joi');
+const knex       = require('knex');
+const { DB_URL } = require('../../src/config');
+const app        = require('../../src/app');
 
 before(() => {
 
@@ -23,7 +25,7 @@ describe('GET /api/expenses', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/expenses')
@@ -43,18 +45,16 @@ describe('GET /api/expenses', () => {
 
   context('with valid Authorization', () =>{
 
-    it.skip('should respond with an array of expenses (200)', () => {
+    it('should respond with an array of expenses (200)', () => {
 
       return supertest(app)
         .get('/api/expenses')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            expenses: joi.array().required(),
-          });
+          const schema = joi.array();
 
           joi.assert(resp.body, schema);
         });
@@ -66,7 +66,7 @@ describe('POST /api/expenses', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .post('/api/expenses')
@@ -94,7 +94,7 @@ describe('POST /api/expenses', () => {
 
   context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/expenses')
@@ -117,12 +117,13 @@ describe('POST /api/expenses', () => {
 
   context('with valid Authorization and body', () =>{
 
-    it.skip('should respond with a Location header and an empty body (201)', () => {
+    it('should respond with a Location header and an empty body (201)', () => {
 
       return supertest(app)
         .post('/api/expenses')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .send({
+          owner_id: 1,
           category_id: 1,
           description: 'This months rent',
           amount: 299.99,
@@ -143,7 +144,7 @@ describe('GET /api/expenses/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/expenses/1')
@@ -163,7 +164,7 @@ describe('GET /api/expenses/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .get('/api/expenses/INVALID')
@@ -183,7 +184,7 @@ describe('GET /api/expenses/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with the specified expense (200)', () => {
+    it('should respond with the specified expense (200)', () => {
 
       return supertest(app)
         .get('/api/expenses/1')
@@ -192,9 +193,7 @@ describe('GET /api/expenses/:id', () => {
         .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            expenses: joi.array().required(),
-          });
+          const schema = joi.object().required();
 
           joi.assert(resp.body, schema);
         });
@@ -206,7 +205,7 @@ describe('PATCH /api/expenses/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .patch('/api/expenses/1')
@@ -229,7 +228,7 @@ describe('PATCH /api/expenses/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .patch('/api/expenses/INVALID')
@@ -238,7 +237,7 @@ describe('PATCH /api/expenses/:id', () => {
           description: 'Mortgage'
         })
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(404)
         .then(resp => {
 
           const schema = joi.object({
@@ -252,7 +251,7 @@ describe('PATCH /api/expenses/:id', () => {
 
   context('with invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .patch('/api/expenses/1')
@@ -275,7 +274,7 @@ describe('PATCH /api/expenses/:id', () => {
 
   context('with valid Authorization, :id, and body', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .patch('/api/expenses/1')
@@ -283,7 +282,7 @@ describe('PATCH /api/expenses/:id', () => {
         .send({
           description: 'Mortgage'
         })
-        .expect('Content-Type', /json/)
+        // .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
@@ -296,7 +295,7 @@ describe('DELETE /api/expenses/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .delete('/api/expenses/1')
