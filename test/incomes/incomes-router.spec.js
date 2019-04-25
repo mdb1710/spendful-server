@@ -73,6 +73,7 @@ describe.only('POST /api/incomes', () => {
           category_id: 6,
           description: 'Certain Deeds',
           amount: 29.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           recurring_rule: null,
         })
@@ -123,6 +124,7 @@ describe.only('POST /api/incomes', () => {
           category_id: 6,
           description: 'Certain Deeds',
           amount: 29.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           recurring_rule: null,
         })
