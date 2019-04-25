@@ -21,7 +21,7 @@ const expenseService = {
             .into('expenses')
             .returning('*')
             .then(([expense]) => expense)
-            .then(expense => this.getIncomeById(db, expense.id, expense.owner_id))
+            // .then(expense => this.getExpenseById(db, expense.id, expense.owner_id))
     },
 
     deleteExpense(db, id){
