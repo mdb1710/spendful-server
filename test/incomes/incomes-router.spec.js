@@ -19,11 +19,11 @@ after(() => {
   app.get('db').destroy();
 });
 
-describe('GET /api/incomes', () => {
+describe.only('GET /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/incomes')
@@ -43,18 +43,16 @@ describe('GET /api/incomes', () => {
 
   context('with valid Authorization', () =>{
 
-    it.skip('should respond with an array of incomes (200)', () => {
+    it('should respond with an array of incomes (200)', () => {
 
       return supertest(app)
         .get('/api/incomes')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            incomes: joi.array().required(),
-          });
+          const schema = joi.array()
 
           joi.assert(resp.body, schema);
         });
@@ -62,11 +60,11 @@ describe('GET /api/incomes', () => {
   });
 });
 
-describe('POST /api/incomes', () => {
+describe.only('POST /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -93,7 +91,7 @@ describe('POST /api/incomes', () => {
 
   context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -116,7 +114,7 @@ describe('POST /api/incomes', () => {
 
   context('with valid Authorization and body', () =>{
 
-    it.skip('should respond with a Location header and an empty body (201)', () => {
+    it('should respond with a Location header and an empty body (201)', () => {
 
       return supertest(app)
         .post('/api/incomes')
@@ -137,11 +135,11 @@ describe('POST /api/incomes', () => {
   });
 });
 
-describe('GET /api/incomes/:id', () => {
+describe.only('GET /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/incomes/1')
@@ -161,7 +159,7 @@ describe('GET /api/incomes/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .get('/api/incomes/INVALID')
@@ -181,7 +179,7 @@ describe('GET /api/incomes/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with the specified income (200)', () => {
+    it('should respond with the specified income (200)', () => {
 
       return supertest(app)
         .get('/api/incomes/1')
@@ -190,9 +188,7 @@ describe('GET /api/incomes/:id', () => {
         .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            incomes: joi.array().required(),
-          });
+          const schema = joi.object();
 
           joi.assert(resp.body, schema);
         });
@@ -200,11 +196,11 @@ describe('GET /api/incomes/:id', () => {
   });
 });
 
-describe('PATCH /api/incomes/:id', () => {
+describe.only('PATCH /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -227,7 +223,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .patch('/api/incomes/INVALID')
@@ -236,7 +232,7 @@ describe('PATCH /api/incomes/:id', () => {
           amount: 49.99,
         })
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(404)
         .then(resp => {
 
           const schema = joi.object({
@@ -250,7 +246,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -273,7 +269,7 @@ describe('PATCH /api/incomes/:id', () => {
 
   context('with valid Authorization, :id, and body', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .patch('/api/incomes/1')
@@ -281,7 +277,6 @@ describe('PATCH /api/incomes/:id', () => {
         .send({
           amount: 49.99,
         })
-        .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
@@ -290,11 +285,11 @@ describe('PATCH /api/incomes/:id', () => {
   });
 });
 
-describe('DELETE /api/incomes/:id', () => {
+describe.only('DELETE /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .delete('/api/incomes/1')
@@ -314,7 +309,7 @@ describe('DELETE /api/incomes/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .delete('/api/incomes/INVALID')
@@ -334,12 +329,11 @@ describe('DELETE /api/incomes/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .delete('/api/incomes/1')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
-        .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
