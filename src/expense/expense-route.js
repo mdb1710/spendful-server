@@ -30,8 +30,8 @@ expenseRouter
             const { category_id, description, amount, recurring_rule} = req.body
             const fields = ['category_id', 'description', 'amount']
             const newExpense = {
-                category_id: Number(category_id), 
-                description, 
+                category_id: Number(category_id),
+                description,
                 amount,
                 recurring_rule
             }
@@ -42,7 +42,7 @@ expenseRouter
                 }
             }
 
-            newExpense[owner_id] = req.user.id
+            newExpense.owner_id = req.user.id
 
             const expense = await expenseService
                 .insertExpense(
@@ -50,7 +50,7 @@ expenseRouter
                     newExpense
                 )
 
-            res.json(expense)
+            res.status(201).json(expense)
             next()
         } catch(error){
             next(error)
@@ -76,23 +76,23 @@ expenseRouter
                     req.app.get('db'),
                     req.params.id
                 )
-        
+
             res.status(204).end()
-            next()  
+            next()
         } catch(error){
             next(error)
         }
     })
     .patch(bodyParser, async(req, res, next) => {
-        try{ 
+        try{
             const updatedExpense = await expenseService
                 .updateExpense(
-                    req.app.get('db'), 
-                    req.body, 
+                    req.app.get('db'),
+                    req.body,
                     req.params.id
                 )
-          
-            res.json(updatedExpense)
+
+            res.status(204).json(updatedExpense)
             next()
         } catch(error){
             next(error)
