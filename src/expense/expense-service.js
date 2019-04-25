@@ -32,10 +32,10 @@ const expenseService = {
 
     updateExpense(db, updateData, id){
         return db('expenses')
-        .where({id})
-        .update(updateData)
-        .returning('*')
-        .then(([expense]) => expense)
+            .where({id})
+            .update(updateData)
+            .returning('*')
+            .then(([expense]) => expense)
     }
 }
 

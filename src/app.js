@@ -11,6 +11,9 @@ const usersRouter = require('./users/users-router')
 const incomeRouter = require('./income/income-router')
 const expenseRouter = require('./expense/expense-route')
 const reportRouter = require('./reports/report-router')
+const categoryRouter = require('./categories/category-router')
+
+
 const app = express();
 
 let morganOption = 'common';
@@ -37,6 +40,7 @@ app.use(helmet());
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/categories', categoryRouter)
 app.use('/api/incomes', incomeRouter)
 app.use('/api/expenses', expenseRouter)
 app.use('/api/reports', reportRouter)

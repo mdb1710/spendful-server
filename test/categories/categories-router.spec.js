@@ -23,7 +23,7 @@ describe('GET /api/categories', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/categories')
@@ -43,18 +43,16 @@ describe('GET /api/categories', () => {
 
   context('with valid Authorization', () =>{
 
-    it.skip('should respond with an array of categories (200)', () => {
+    it('should respond with an array of categories (200)', () => {
 
       return supertest(app)
         .get('/api/categories')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            categories: joi.array().required(),
-          });
+          const schema = joi.array()
 
           joi.assert(resp.body, schema);
         });
@@ -66,7 +64,7 @@ describe('POST /api/categories', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .post('/api/categories')
@@ -91,7 +89,7 @@ describe('POST /api/categories', () => {
 
   context('with an invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .post('/api/categories')
@@ -114,7 +112,7 @@ describe('POST /api/categories', () => {
 
   context('with valid Authorization and body', () =>{
 
-    it.skip('should respond with a Location header and an empty body (201)', () => {
+    it('should respond with a Location header and an empty body (201)', () => {
 
       return supertest(app)
         .post('/api/categories')
@@ -137,7 +135,7 @@ describe('GET /api/categories/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/categories/1')
@@ -157,7 +155,7 @@ describe('GET /api/categories/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .get('/api/categories/INVALID')
@@ -177,7 +175,7 @@ describe('GET /api/categories/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with the specified category (200)', () => {
+    it('should respond with the specified category (200)', () => {
 
       return supertest(app)
         .get('/api/categories/1')
@@ -186,9 +184,7 @@ describe('GET /api/categories/:id', () => {
         .expect(200)
         .then(resp => {
 
-          const schema = joi.object({
-            categories: joi.array().required(),
-          });
+          const schema = joi.object();
 
           joi.assert(resp.body, schema);
         });
@@ -200,7 +196,7 @@ describe('PATCH /api/categories/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .patch('/api/categories/1')
@@ -223,7 +219,7 @@ describe('PATCH /api/categories/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .patch('/api/categories/INVALID')
@@ -232,7 +228,7 @@ describe('PATCH /api/categories/:id', () => {
           monthly_budget: 200,
         })
         .expect('Content-Type', /json/)
-        .expect(401)
+        .expect(404)
         .then(resp => {
 
           const schema = joi.object({
@@ -246,7 +242,7 @@ describe('PATCH /api/categories/:id', () => {
 
   context('with invalid body', () =>{
 
-    it.skip('should respond with an error (400)', () => {
+    it('should respond with an error (400)', () => {
 
       return supertest(app)
         .patch('/api/categories/1')
@@ -269,7 +265,7 @@ describe('PATCH /api/categories/:id', () => {
 
   context('with valid Authorization, :id, and body', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .patch('/api/categories/1')
@@ -277,7 +273,6 @@ describe('PATCH /api/categories/:id', () => {
         .send({
           monthly_budget: 200,
         })
-        .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
@@ -290,7 +285,7 @@ describe('DELETE /api/categories/:id', () => {
 
   context('with invalid Authorization', () =>{
 
-    it.skip('should respond with an error (401)', () => {
+    it('should respond with an error (401)', () => {
 
       return supertest(app)
         .delete('/api/categories/1')
@@ -310,7 +305,7 @@ describe('DELETE /api/categories/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .delete('/api/categories/INVALID')
@@ -330,7 +325,7 @@ describe('DELETE /api/categories/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .delete('/api/categories/1')
