@@ -1,9 +1,11 @@
 /* global expect supertest*/
+
 'use strict';
-const joi = require('@hapi/joi');
-const knex = require('knex');
-const { PORT, DB_URL } = require('../../src/config');
-const app = require('../../src/app');
+
+const joi        = require('@hapi/joi');
+const knex       = require('knex');
+const { DB_URL } = require('../../src/config');
+const app        = require('../../src/app');
 
 before(() => {
 
@@ -19,7 +21,7 @@ after(() => {
   app.get('db').destroy();
 });
 
-// TODO MVP
+
 describe('POST /api/auth/login', () => {
 
   context('with invalid body (or credentials)', () =>{
@@ -69,7 +71,7 @@ describe('POST /api/auth/login', () => {
   });
 });
 
-// TODO MVP
+
 describe('GET /api/auth/refresh', () => {
 
   context('with invalid Authorization', () =>{
