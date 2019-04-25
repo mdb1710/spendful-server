@@ -316,7 +316,7 @@ describe('DELETE /api/expenses/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .delete('/api/expenses/INVALID')
@@ -336,12 +336,11 @@ describe('DELETE /api/expenses/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .delete('/api/expenses/1')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
-        .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);

@@ -19,7 +19,7 @@ after(() => {
   app.get('db').destroy();
 });
 
-describe.only('GET /api/incomes', () => {
+describe('GET /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
@@ -60,7 +60,7 @@ describe.only('GET /api/incomes', () => {
   });
 });
 
-describe.only('POST /api/incomes', () => {
+describe('POST /api/incomes', () => {
 
   context('with invalid Authorization', () =>{
 
@@ -137,7 +137,7 @@ describe.only('POST /api/incomes', () => {
   });
 });
 
-describe.only('GET /api/incomes/:id', () => {
+describe('GET /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
@@ -198,7 +198,7 @@ describe.only('GET /api/incomes/:id', () => {
   });
 });
 
-describe.only('PATCH /api/incomes/:id', () => {
+describe('PATCH /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
@@ -287,7 +287,7 @@ describe.only('PATCH /api/incomes/:id', () => {
   });
 });
 
-describe.only('DELETE /api/incomes/:id', () => {
+describe('DELETE /api/incomes/:id', () => {
 
   context('with invalid Authorization', () =>{
 
