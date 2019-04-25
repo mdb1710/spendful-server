@@ -27,12 +27,13 @@ expenseRouter
     })
     .post(bodyParser, async (req, res, next) => {
         try{
-            const { category_id, description, amount, recurring_rule} = req.body
-            const fields = ['category_id', 'description', 'amount']
+            const { category_id, description, amount, start_date, recurring_rule} = req.body
+            const fields = ['category_id', 'description', 'amount', 'start_date']
             const newExpense = {
                 category_id: Number(category_id),
                 description,
                 amount,
+                start_date,
                 recurring_rule
             }
 
