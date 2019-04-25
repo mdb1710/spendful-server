@@ -23,7 +23,7 @@ describe('GET /api/reports', () => {
 
   context('with invalid Authorization', () =>{
 
-    it('should respond with an error (401)', () => {
+    it.skip('should respond with an error (401)', () => {
 
       return supertest(app)
         .get('/api/reports')
@@ -43,7 +43,7 @@ describe('GET /api/reports', () => {
 
   context('with valid Authorization', () =>{
 
-    it('should respond with a collection (object) of reports for each year (200)', () => {
+    it.skip('should respond with a collection (object) of reports for each year (200)', () => {
 
       return supertest(app)
         .get('/api/reports')
