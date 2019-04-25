@@ -75,6 +75,7 @@ categoryRouter
     })
     .patch(bodyParser, async(req, res, next) => {
         try{
+            
             // const keys = ['name', 'type', 'monthly_budget']
             // if(!req.body.name && !req.body.type && !req.body.monthly_budget){
             //     return res.status(400).json({errors: ['Bad Reguest']})
