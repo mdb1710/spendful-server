@@ -31,7 +31,12 @@ describe('GET /api/users', () => {
         .expect('Content-Type', /json/)
         .expect(401)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
@@ -39,7 +44,20 @@ describe('GET /api/users', () => {
   context('with valid Authorization', () =>{
 
     it.skip('should respond with an array of users (200)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .get('/api/users')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(resp => {
+
+          const schema = joi.object({
+            users: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
     });
   });
 });
@@ -120,12 +138,17 @@ describe('GET /api/users/:id', () => {
     it.skip('should respond with an error (401)', () => {
 
       return supertest(app)
-        .get('/api/users')
+        .get('/api/users/1')
         .set('Authorization', 'Bearer INVALID_TOKEN')
         .expect('Content-Type', /json/)
         .expect(401)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
@@ -133,14 +156,35 @@ describe('GET /api/users/:id', () => {
   context('with invalid :id', () =>{
 
     it.skip('should respond with an error (404)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .get('/api/users/INVALID')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then(resp => {
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
     });
   });
 
   context('with valid Authorization and :id', () =>{
 
     it.skip('should respond with the specified user (200)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .get('/api/users/1')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(resp => {
+          // TODO joi.assert(resp, someSchema);
+        });
     });
   });
 });
@@ -152,12 +196,20 @@ describe('PATCH /api/users/:id', () => {
     it.skip('should respond with an error (401)', () => {
 
       return supertest(app)
-        .get('/api/users')
+        .patch('/api/users/1')
         .set('Authorization', 'Bearer INVALID_TOKEN')
+        .send({
+          full_name: 'My silly halloween name'
+        })
         .expect('Content-Type', /json/)
         .expect(401)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
@@ -165,21 +217,64 @@ describe('PATCH /api/users/:id', () => {
   context('with invalid :id', () =>{
 
     it.skip('should respond with an error (404)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .patch('/api/users/INVALID')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .send({
+          full_name: 'My silly halloween name'
+        })
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then(resp => {
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
     });
   });
 
   context('with invalid body', () =>{
 
     it.skip('should respond with an error (400)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .patch('/api/users/1')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .send({
+          foobar: 'foobar'
+        })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .then(resp => {
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
     });
   });
 
   context('with valid Authorization, :id, and body', () =>{
 
     it.skip('should respond with an empty body (204)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .patch('/api/users/1')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .send({
+          full_name: 'My silly halloween name'
+        })
+        .expect('Content-Type', /json/)
+        .expect(204)
+        .then(resp => {
+          // TODO joi.assert(resp, someSchema);
+        });
     });
   });
 });
@@ -191,12 +286,17 @@ describe('DELETE /api/users/:id', () => {
     it.skip('should respond with an error (401)', () => {
 
       return supertest(app)
-        .get('/api/users')
+        .delete('/api/users/1')
         .set('Authorization', 'Bearer INVALID_TOKEN')
         .expect('Content-Type', /json/)
         .expect(401)
         .then(resp => {
-          // TODO joi.assert(resp, someSchema);
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
         });
     });
   });
@@ -204,14 +304,35 @@ describe('DELETE /api/users/:id', () => {
   context('with invalid :id', () =>{
 
     it.skip('should respond with an error (404)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .delete('/api/users/INVALID')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .then(resp => {
+
+          const schema = joi.object({
+            errors: joi.array().required(),
+          });
+
+          joi.assert(resp.body, schema);
+        });
     });
   });
 
   context('with valid Authorization and :id', () =>{
 
     it.skip('should respond with an empty body (204)', () => {
-      expect(false).to.be.true();
+
+      return supertest(app)
+        .delete('/api/users/1')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
+        .expect('Content-Type', /json/)
+        .expect(204)
+        .then(resp => {
+          // TODO joi.assert(resp, someSchema);
+        });
     });
   });
 });
