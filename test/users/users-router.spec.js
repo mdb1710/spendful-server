@@ -251,7 +251,7 @@ describe('PATCH /api/users/:id', () => {
         .expect(400)
         .then(resp => {
 
-          const schema = joi.object({204
+          const schema = joi.object({
             errors: joi.array().required(),
           });
 
