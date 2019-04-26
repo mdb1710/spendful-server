@@ -7,12 +7,21 @@ const categoryService = {
             .where({owner_id})
     },
 
-    getCategoryById(db, id, owner_id){
+    getCategoryByUserId(db, id, owner_id){
         return db('categories')
             .select('*')
             .where({id})
             .andWhere({owner_id})
             .first()
+    },
+
+    hasCatergoryById(db, owner_id, name, type){
+        return db('categories')
+            .where({owner_id})
+            .andWhere({name})
+            .andWhere({type})
+            .first()
+            .then(category => !!category)
     },
 
     insertCategory(db, newCategory){

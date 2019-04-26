@@ -46,8 +46,18 @@ categoryRouter
                    return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
                 }
             }
-    
-            // newCategory[owner_id] = req.user.id
+            
+            const hasCategory = await categoryService
+                .hasCatergoryByUserId(
+                    req.app.get('db'),
+                    req.user.id,
+                    name,
+                    type
+                )
+
+            if(hasCategory){
+                return res.status(400).json({errors: ['Category already exists']})
+            }
 
             const category = await categoryService
                 .insertCategory(
@@ -83,7 +93,7 @@ categoryRouter
             })
 
             const validation = Joi.validate(req.body, schema)
-            // console.log(validation)
+          
             if(validation.error) {
                 const errorStrings = validation.error.details.map(err => {
                     return err.message;
