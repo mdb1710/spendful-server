@@ -1,4 +1,5 @@
 const express = require('express')
+const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
 const categoryService = require('./category-service')
 
@@ -75,14 +76,25 @@ categoryRouter
     })
     .patch(bodyParser, async(req, res, next) => {
         try{
-            // const keys = ['name', 'type', 'monthly_budget']
-            // if(!req.body.name && !req.body.type && !req.body.monthly_budget){
-            //     return res.status(400).json({errors: ['Bad Reguest']})
-            // }
+            const schema = Joi.object({
+                name: Joi.string(),
+                type: Joi.string(),
+                monthly_budget: Joi.number(),
+            })
+
+            const validation = Joi.validate(req.body, schema)
+            // console.log(validation)
+            if(validation.error) {
+                const errorStrings = validation.error.details.map(err => {
+                    return err.message;
+                })
+                return res.status(400).json({ errors: errorStrings });
+            }
+
             const updatedCategory = await categoryService
                 .updateCategory(
                     req.app.get('db'),
-                    req.body,
+                    validation.value,
                     req.params.id
                 )
             
@@ -97,6 +109,22 @@ categoryRouter
     })
     .delete(async(req, res, next) => {
         try{
+            const incomesForCategory = await categoryService
+                .getIncomesByCategoryId(
+                    req.app.get('db'),
+                    req.params.id,
+                    req.user.id
+                )
+            const expensesForCategory = await categoryService
+                    .getExpensesByCategoryId(
+                        req.app.get('db'),
+                        req.params.id,
+                        req.user.id
+                    )
+            
+            if(incomesForCategory || expensesForCategory){
+                return res.status(400).json({ errors: ['Category contains expenses or incomes']})
+            }
             await categoryService
                 .deleteCategory(
                     req.app.get('db'), 
@@ -115,7 +143,7 @@ async function isCategoryExist(req, res, next){
     try{
         const id = req.params.id
         if(isNaN(parseInt(id, 10))){
-            return res.status(404).json({errors: ['Not a number']})
+            return res.status(404).json({errors: [`Category doesn't exist`]})
         }
 
         const category = await categoryService
