@@ -7,7 +7,7 @@ const categoryService = {
             .where({owner_id})
     },
 
-    getCategoryByUserId(db, id, owner_id){
+    getCategoryById(db, id, owner_id){
         return db('categories')
             .select('*')
             .where({id})
@@ -15,7 +15,7 @@ const categoryService = {
             .first()
     },
 
-    hasCatergoryById(db, owner_id, name, type){
+    hasCatergoryByUserId(db, owner_id, name, type){
         return db('categories')
             .where({owner_id})
             .andWhere({name})
