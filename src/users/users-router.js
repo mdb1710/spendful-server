@@ -24,7 +24,7 @@ usersRouter
                 const errors = validateUser.details.map(err => {
                     return err.message
                 })
-                res.status(400).json({errors})
+                return res.status(400).json({errors})
             }
 
             const hasUserWithEmail = await userService.getUserbyEmail(req.app.get('db'), newUser.email_address)
