@@ -281,7 +281,7 @@ describe('PATCH /api/categories/:id', () => {
   });
 });
 
-describe.only('DELETE /api/categories/:id', () => {
+describe('DELETE /api/categories/:id', () => {
 
   context('with invalid Authorization', () =>{
 
