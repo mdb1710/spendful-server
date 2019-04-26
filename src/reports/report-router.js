@@ -16,20 +16,20 @@ reportRouter
             const incomesForYear = await reportService
                 .getIncomesByYear(
                     req.app.get('db'),
-                    Number(year), 
+                    Number(year),
                     req.user.id
                 )
-            
+
             const expensesForYear = await reportService
                 .getExpensesByYear(
                     req.app.get('db'),
-                    Number(year), 
+                    Number(year),
                     req.user.id
                 )
 
             res.json({
-                incomes: recurring(incomesForYear),
-                expenses: recurring(expensesForYear)
+                incomes: incomesForYear,
+                expenses: expensesForYear
             })
             next()
         }catch(error){
@@ -54,7 +54,7 @@ reportRouter
                     Number(month),
                     req.user.id
                 )
-            
+
             const expensesForMonth = await reportService
                 .getExpensesByYearAndMonth(
                     req.app.get('db'),
@@ -62,11 +62,11 @@ reportRouter
                     Number(month),
                     req.user.id
                 )
-            
+
 
             res.json({
-                incomes: recurring(incomesForMonth),
-                expenses: recurring(expensesForMonth)
+                incomes: incomesForMonth,
+                expenses: expensesForMonth
             })
             next()
         }catch(error){
@@ -75,14 +75,17 @@ reportRouter
     })
 
 
-function recurring(data){
-    const regexs = /\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/
-    data.forEach(item => {
-        if(item.recurring_rule !== null){
-            item.recurring_rule = item.recurring_rule.match(regexs)[0]
-        }
-    })
-    return data
-}
+// function recurring(data){
+//     const regexs = /\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/i
+//     data.forEach(item => {
+//         if(item.recurring_rule !== null){
+//             const matches = regexs.exec(item.recurring_rule);
+//             if (matches) {
+//                 item.recurring_rule = matches[0];
+//             }
+//         }
+//     })
+//     return data
+// }
 
 module.exports = reportRouter

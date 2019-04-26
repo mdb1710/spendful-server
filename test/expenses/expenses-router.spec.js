@@ -75,6 +75,7 @@ describe('POST /api/expenses', () => {
           category_id: 1,
           description: 'This months rent',
           amount: 299.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           // This value will be translated into an RRule for the DB
           recurring_rule: 'Monthly',
@@ -123,10 +124,10 @@ describe('POST /api/expenses', () => {
         .post('/api/expenses')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .send({
-          owner_id: 1,
           category_id: 1,
           description: 'This months rent',
           amount: 299.99,
+          start_date: new Date().toISOString(),
           // This name could be renamed to make it more friendly to the consumer
           // This value will be translated into an RRule for the DB
           recurring_rule: 'Monthly',
@@ -315,7 +316,7 @@ describe('DELETE /api/expenses/:id', () => {
 
   context('with invalid :id', () =>{
 
-    it.skip('should respond with an error (404)', () => {
+    it('should respond with an error (404)', () => {
 
       return supertest(app)
         .delete('/api/expenses/INVALID')
@@ -335,12 +336,11 @@ describe('DELETE /api/expenses/:id', () => {
 
   context('with valid Authorization and :id', () =>{
 
-    it.skip('should respond with an empty body (204)', () => {
+    it('should respond with an empty body (204)', () => {
 
       return supertest(app)
         .delete('/api/expenses/1')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
-        .expect('Content-Type', /json/)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
