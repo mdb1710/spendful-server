@@ -93,7 +93,7 @@ categoryRouter
             })
 
             const validation = Joi.validate(req.body, schema)
-            // console.log(validation)
+          
             if(validation.error) {
                 const errorStrings = validation.error.details.map(err => {
                     return err.message;
