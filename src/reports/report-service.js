@@ -1,4 +1,5 @@
-const { RRule } = require('rrule');
+const { DateTime } = require('luxon');
+const { RRule }    = require('rrule');
 
 const createRRule = function (startDate, frequency) {
 
@@ -53,10 +54,13 @@ const reportService = {
 
                 const rule = createRRule(r.startDate, r.recurring_rule);
 
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
+
                 const occurences = rule.between(
-                  new Date(Date.UTC(year, month-1, 1, true)),
-                  // FIXME use luxon to catch edge cases
-                  new Date(Date.UTC(year, month-1, 28, true))
+                  firstDayOfMonth.toJSDate(),
+                  lastDayOfMonth.toJSDate(),
+                  true
                 );
 
                 if (occurences.length) {
@@ -107,10 +111,13 @@ const reportService = {
 
                 const rule = createRRule(r.startDate, r.recurring_rule);
 
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
+
                 const occurences = rule.between(
-                  new Date(Date.UTC(year, month-1, 1, true)),
-                  // FIXME use luxon to catch edge cases
-                  new Date(Date.UTC(year, month-1, 28, true))
+                  firstDayOfMonth.toJSDate(),
+                  lastDayOfMonth.toJSDate(),
+                  true
                 );
 
                 if (occurences.length) {
