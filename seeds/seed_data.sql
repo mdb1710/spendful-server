@@ -38,7 +38,7 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
     (
         2,
         1,
-        'Nexflix',
+        'Netflix',
         'expense',
         20.00
     ),
