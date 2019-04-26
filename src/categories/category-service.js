@@ -28,10 +28,6 @@ const categoryService = {
         return db('categories')
             .where({id})
             .delete()
-            // .then(res => console.log(res))
-            // .catch(err => {
-            //     return {errors: ['Can not delete a category with incomes or expenses!']}
-            // })
     },
 
     updateCategory(db, updateData, id){
