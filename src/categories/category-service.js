@@ -28,6 +28,10 @@ const categoryService = {
         return db('categories')
             .where({id})
             .delete()
+            // .then(res => console.log(res))
+            // .catch(err => {
+            //     return {errors: ['Can not delete a category with incomes or expenses!']}
+            // })
     },
 
     updateCategory(db, updateData, id){
@@ -36,6 +40,22 @@ const categoryService = {
             .update(updateData)
             .returning('*')
             .then(([category]) => !!category)
+    },
+
+    getIncomesByCategoryId(db, category_id, owner_id){
+        return db('incomes')
+            .select('*')
+            .where({category_id})
+            .andWhere({owner_id})
+            .then(incomes => !!incomes)
+    },
+
+    getExpensesByCategoryId(db, category_id, owner_id){
+        return db('expenses')
+        .select('*')
+        .where({category_id})
+        .andWhere({owner_id})
+        .then(expenses => !!expenses)
     }
 
 }
