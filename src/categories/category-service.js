@@ -15,6 +15,15 @@ const categoryService = {
             .first()
     },
 
+    hasCatergoryByUserId(db, owner_id, name, type){
+        return db('categories')
+            .where({owner_id})
+            .andWhere({name})
+            .andWhere({type})
+            .first()
+            .then(category => !!category)
+    },
+
     insertCategory(db, newCategory){
         return db
             .insert(newCategory)
@@ -36,6 +45,22 @@ const categoryService = {
             .update(updateData)
             .returning('*')
             .then(([category]) => !!category)
+    },
+
+    getIncomesByCategoryId(db, category_id, owner_id){
+        return db('incomes')
+            .select('*')
+            .where({category_id})
+            .andWhere({owner_id})
+            .then(incomes => !!incomes)
+    },
+
+    getExpensesByCategoryId(db, category_id, owner_id){
+        return db('expenses')
+        .select('*')
+        .where({category_id})
+        .andWhere({owner_id})
+        .then(expenses => !!expenses)
     }
 
 }

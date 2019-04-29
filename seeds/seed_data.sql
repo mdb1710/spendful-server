@@ -38,7 +38,7 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
     (
         2,
         1,
-        'Nexflix',
+        'Netflix',
         'expense',
         20.00
     ),
@@ -142,7 +142,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         'Rent',
         1200.00,
         make_timestamptz(2019, 1, 1, 0, 0, 0),
-        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        'monthly'
     ),
     (
         2,
@@ -151,7 +151,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         'Netflix',
         20.00,
         make_timestamptz(2019, 1, 1, 0, 0, 0),
-        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        'monthly'
     ),
     (
         3,
@@ -169,7 +169,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         'Car Insurance',
         350.00,
         make_timestamptz(2019, 1, 1, 0, 0, 0),
-        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        'monthly'
     ),
     (
         5,
@@ -187,7 +187,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         'Motorcycle',
         3500.00,
         make_timestamptz(2019, 1, 1, 0, 0, 0),
-        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        'monthly'
     ),
     (
         7,
@@ -196,7 +196,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         'Office Space',
         500000.00,
         make_timestamptz(2019, 1, 1, 0, 0, 0),
-        'RRULE:FREQ=MONTHLY;INTERVAL=1;WKST=MO'
+        'monthly'
     );
 
 ALTER SEQUENCE IF EXISTS expenses_id_seq RESTART WITH 8;

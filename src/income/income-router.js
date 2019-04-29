@@ -1,4 +1,5 @@
 const express = require('express')
+const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
 const incomeService = require('./income-service')
 
@@ -40,7 +41,7 @@ incomeRouter
 
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
-                   return res.status(400).json({errors: [`Missing ${req.body[fields[i]]} in request body`]})
+                   return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
                 }
             }
 
@@ -89,10 +90,31 @@ incomeRouter
     })
     .patch(bodyParser, async(req, res, next) => {
         try{
+
+            const schema = Joi.object({
+                category_id: Joi.number(),
+                description: Joi.string(),
+                amount: Joi.number(),
+                start_date: Joi.date(),
+                recurring_rule: Joi.alternatives().try([
+                    Joi.string().regex(/\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/),
+                    Joi.allow(null)
+                ])
+            })
+
+            const validation = Joi.validate(req.body, schema)
+
+            if (validation.error) {
+                const errorStrings = validation.error.details.map(err => {
+                    return err.message;
+                })
+                return res.status(400).json({ errors: errorStrings });
+            }
+
             await incomeService
                 .updateIncome(
                     req.app.get('db'),
-                    req.body,
+                    validation.value,
                     req.params.id
                 )
 
@@ -108,7 +130,7 @@ incomeRouter
 async function isIncomeExist(req, res, next){
     try{
         if(isNaN(parseInt(req.params.id, 10))){
-            return res.status(404).json({errors: ['Not a number']})
+            return res.status(404).json({errors: [`Income doesn't exist`]})
         }
 
         const income = await incomeService
@@ -117,6 +139,11 @@ async function isIncomeExist(req, res, next){
                 req.params.id,
                 req.user.id
             )
+        if(!income){
+            return res
+                .status(404)
+                .json({errors: [`Income doesn't exist`]})
+        }
 
         res.income = income
         next()
