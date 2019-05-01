@@ -54,7 +54,7 @@ const reportService = {
 
                 const rule = createRRule(r.start_date, r.recurring_rule);
 
-                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1, zone: 'UTC' });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
 
                 const occurences = rule.between(
@@ -111,7 +111,7 @@ const reportService = {
 
                 const rule = createRRule(r.start_date, r.recurring_rule);
 
-                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1, zone: 'UTC' });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
 
                 const occurences = rule.between(
