@@ -38,6 +38,10 @@ expenseRouter
                 recurring_rule
             }
 
+            if (newExpense.recurring_rule === 'once'){
+                newExpense.recurring_rule = null; 
+            }
+
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
                    return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
