@@ -52,7 +52,7 @@ const reportService = {
 
               if (r.recurring_rule && r.start_date) {
 
-                const rule = createRRule(r.startDate, r.recurring_rule);
+                const rule = createRRule(r.start_date, r.recurring_rule);
 
                 const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
@@ -109,7 +109,7 @@ const reportService = {
 
               if (r.recurring_rule && r.start_date) {
 
-                const rule = createRRule(r.startDate, r.recurring_rule);
+                const rule = createRRule(r.start_date, r.recurring_rule);
 
                 const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
