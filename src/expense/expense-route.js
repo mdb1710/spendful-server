@@ -38,7 +38,7 @@ expenseRouter
                 recurring_rule
             }
 
-            if (newExpense.recurring_rule === 'once'){
+            if (newExpense.recurring_rule === 'ONCE'){
                 newExpense.recurring_rule = null; 
             }
 
