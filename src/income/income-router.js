@@ -14,11 +14,11 @@ incomeRouter
             const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
 
-            if(!incomes){
-                return res.status(404).json({
-                    errors: [`No incomes found`],
-                })
-            }
+            // if(!incomes){
+            //     return res.status(404).json({
+            //         errors: [`No incomes found`],
+            //     })
+            // }
 
             res.json(incomes)
             next()
@@ -40,7 +40,7 @@ incomeRouter
             }
 
             if (newIncome.recurring_rule === 'ONCE'){
-                newIncome.recurring_rule = null; 
+                newIncome.recurring_rule = null;
             }
 
             for(let i=0; i<fields.length; i++){
