@@ -14,11 +14,11 @@ expenseRouter
             const expenses = await expenseService
                 .getAllExpenses(req.app.get('db'), req.user.id)
 
-            if(expenses.length === 0){
-                return res.status(404).json({
-                    errors: [`No expenses found`],
-                })
-            }
+            // if(expenses.length === 0){
+            //     return res.status(404).json({
+            //         errors: [`No expenses found`],
+            //     })
+            // }
 
             res.json(expenses)
             next()
@@ -39,7 +39,7 @@ expenseRouter
             }
 
             if (newExpense.recurring_rule === 'ONCE'){
-                newExpense.recurring_rule = null; 
+                newExpense.recurring_rule = null;
             }
 
             for(let i=0; i<fields.length; i++){
@@ -138,7 +138,7 @@ async function isExpenseExist(req, res, next){
                 req.params.id,
                 req.user.id
             )
-        
+
         if(!expense){
             return res
                 .status(404)
