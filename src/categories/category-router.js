@@ -14,15 +14,15 @@ categoryRouter
         try{
             const categories = await categoryService
                 .getAllCategoriesByUserId(
-                    req.app.get('db'), 
+                    req.app.get('db'),
                     req.user.id
                 )
 
-            if(categories.length === 0){
-                return res.status(404).json({
-                    errors: [`No categories found`],
-                })
-            }
+            // if(categories.length === 0){
+            //     return res.status(404).json({
+            //         errors: [`No categories found`],
+            //     })
+            // }
 
             res.json(categories)
             next()
@@ -40,13 +40,13 @@ categoryRouter
                 type,
                 monthly_budget
             }
-    
+
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
                    return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
                 }
             }
-            
+
             const hasCategory = await categoryService
                 .hasCatergoryByUserId(
                     req.app.get('db'),
@@ -61,7 +61,7 @@ categoryRouter
 
             const category = await categoryService
                 .insertCategory(
-                    req.app.get('db'), 
+                    req.app.get('db'),
                     newCategory
                 )
 
@@ -93,7 +93,7 @@ categoryRouter
             })
 
             const validation = Joi.validate(req.body, schema)
-          
+
             if(validation.error) {
                 const errorStrings = validation.error.details.map(err => {
                     return err.message;
@@ -107,7 +107,7 @@ categoryRouter
                     validation.value,
                     req.params.id
                 )
-            
+
             if(!updatedCategory){
                 return res.status(500).end()
             }
@@ -131,18 +131,18 @@ categoryRouter
                         req.params.id,
                         req.user.id
                     )
-            
+
             if(incomesForCategory || expensesForCategory){
                 return res.status(400).json({ errors: ['Category contains expenses or incomes']})
             }
             await categoryService
                 .deleteCategory(
-                    req.app.get('db'), 
+                    req.app.get('db'),
                     req.params.id
                 )
 
             res.status(204).end()
-            next()  
+            next()
         }catch(error){
             next(error)
         }
@@ -162,7 +162,7 @@ async function isCategoryExist(req, res, next){
                 id,
                 req.user.id
             )
-        
+
         if(!category){
             return res
                 .status(400)
