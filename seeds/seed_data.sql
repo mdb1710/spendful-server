@@ -97,9 +97,16 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
         'office space',
         'expense',
         500000.00
+    ),
+    (
+        11,
+        1,
+        'Example Empty Category',
+        'expense',
+        1000.00
     );
 
-ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 11;
+ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 12;
 
 INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount", "start_date", "recurring_rule")
   VALUES
