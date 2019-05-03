@@ -14,11 +14,11 @@ incomeRouter
             const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
 
-            if(!incomes){
-                return res.status(404).json({
-                    errors: [`No incomes found`],
-                })
-            }
+            // if(!incomes){
+            //     return res.status(404).json({
+            //         errors: [`No incomes found`],
+            //     })
+            // }
 
             res.json(incomes)
             next()
@@ -28,7 +28,7 @@ incomeRouter
     })
     .post(bodyParser, async (req, res, next) => {
         try{
-            const { category_id, description, amount, start_date, recurring_rule} = req.body
+            const { category_id, description, amount, start_date, end_date, recurring_rule} = req.body
             const fields = ['category_id', 'description', 'amount', 'start_date']
             const newIncome = {
                 owner_id: req.user.id,
@@ -36,7 +36,12 @@ incomeRouter
                 description,
                 amount,
                 start_date,
+                end_date,
                 recurring_rule
+            }
+
+            if (newIncome.recurring_rule === 'ONCE'){
+                newIncome.recurring_rule = null;
             }
 
             for(let i=0; i<fields.length; i++){
@@ -96,6 +101,7 @@ incomeRouter
                 description: Joi.string(),
                 amount: Joi.number(),
                 start_date: Joi.date(),
+                end_date: Joi.date().allow(null),
                 recurring_rule: Joi.alternatives().try([
                     Joi.string().regex(/\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/),
                     Joi.allow(null)

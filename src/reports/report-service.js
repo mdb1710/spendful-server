@@ -1,24 +1,37 @@
 const { DateTime } = require('luxon');
 const { RRule }    = require('rrule');
 
-const createRRule = function (startDate, frequency) {
+const createRRule = function (startDate, frequency, endDate = null) {
 
+  const options = {};
 
-  if (/biweekly/i.test(frequency)) {
-    return new RRule({ dtstart: startDate, freq: RRule.WEEKLY, interval: 2 });
+  options.dtstart = startDate;
+
+  if (frequency === 'biweekly') {
+    options.freq     = RRule.WEEKLY;
+    options.interval = 2;
   }
 
-  if (/weekly/i.test(frequency)) {
-    return new RRule({ dtstart: startDate, freq: RRule.WEEKLY, interval: 1 });
+  if (frequency === 'weekly') {
+    options.freq     = RRule.WEEKLY;
+    options.interval = 1;
   }
 
-  if (/monthly/i.test(frequency)) {
-    return new RRule({ dtstart: startDate, freq: RRule.MONTHLY, interval: 1 });
+  if (frequency === 'monthly') {
+    options.freq     = RRule.MONTHLY;
+    options.interval = 1;
   }
 
-  if (/yearly/i.test(frequency)) {
-    return new RRule({ dtstart: startDate, freq: RRule.YEARLY, interval: 1 });
+  if (frequency === 'yearly') {
+    options.freq     = RRule.YEARLY;
+    options.interval = 1;
   }
+
+  if (endDate) {
+    options.until = endDate;
+  }
+
+  return new RRule(options);
 };
 
 const reportService = {
@@ -26,7 +39,7 @@ const reportService = {
     return db('incomes')
       .select('*')
       .where({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(Year from created_at) as integer)'), year)
+      .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
   },
 
   getIncomesByYearAndMonth(db, year, month, owner_id){
@@ -34,8 +47,8 @@ const reportService = {
     return db('incomes')
       .select('*')
       .andWhere({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(YEAR from created_at) as integer)'), year)
-      .andWhere(db.raw('cast(EXTRACT(MONTH from created_at) as integer)'), month)
+      .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
+      .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .then(nonRecurringEvents => {
 
@@ -52,9 +65,12 @@ const reportService = {
 
               if (r.recurring_rule && r.start_date) {
 
-                const rule = createRRule(r.startDate, r.recurring_rule);
+                const start = new Date(r.start_date);
+                const end = (r.end_date) ? new Date(r.end_date) : null;
 
-                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const rule = createRRule(start, r.recurring_rule, end);
+
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1, zone: 'UTC' });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
 
                 const occurences = rule.between(
@@ -63,10 +79,10 @@ const reportService = {
                   true
                 );
 
-                if (occurences.length) {
-                  // add recurring event to results
+                // add each occurrence of recurring event to results
+                occurences.forEach(o => {
                   list.push(r);
-                }
+                });
 
               } else {
 
@@ -84,15 +100,15 @@ const reportService = {
     return db('expenses')
       .select('*')
       .where({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(Year from created_at) as integer)'), year)
+      .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
   },
 
   getExpensesByYearAndMonth(db, year, month, owner_id){
     return db('expenses')
       .select('*')
       .andWhere({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(YEAR from created_at) as integer)'), year)
-      .andWhere(db.raw('cast(EXTRACT(MONTH from created_at) as integer)'), month)
+      .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
+      .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .then(nonRecurringEvents => {
 
@@ -109,9 +125,12 @@ const reportService = {
 
               if (r.recurring_rule && r.start_date) {
 
-                const rule = createRRule(r.startDate, r.recurring_rule);
+                const start = new Date(r.start_date);
+                const end = (r.end_date) ? new Date(r.end_date) : null;
 
-                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1 });
+                const rule = createRRule(start, r.recurring_rule, end);
+
+                const firstDayOfMonth = DateTime.fromObject({ year: year, month: month, day: 1, zone: 'UTC' });
                 const lastDayOfMonth  = firstDayOfMonth.plus({ months: 1 }).minus({ days: 1 });
 
                 const occurences = rule.between(
@@ -120,10 +139,10 @@ const reportService = {
                   true
                 );
 
-                if (occurences.length) {
-                  // add recurring event to results
+                // add each occurrence of recurring event to results
+                occurences.forEach(o => {
                   list.push(r);
-                }
+                });
 
               } else {
 
