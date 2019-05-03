@@ -52,7 +52,12 @@ const categoryService = {
             .select('*')
             .where({category_id})
             .andWhere({owner_id})
-            .then(incomes => !!incomes)
+            .then(incomes => {
+                if (incomes.length === 0) {
+                    return false 
+                }
+                return true 
+            })
     },
 
     getExpensesByCategoryId(db, category_id, owner_id){
@@ -60,7 +65,12 @@ const categoryService = {
         .select('*')
         .where({category_id})
         .andWhere({owner_id})
-        .then(expenses => !!expenses)
+        .then(expenses => { 
+            if (expenses.length === 0){
+                return false
+            }
+            return true
+        })
     }
 
 }
