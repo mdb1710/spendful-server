@@ -323,7 +323,7 @@ describe('DELETE /api/categories/:id', () => {
     });
   });
 
-  context('with valid Authorization and :id', () =>{
+  context('with valid Authorization and :id and category not empty', () =>{
 
     it('should respond with an empty body (204)', () => {
 
@@ -331,6 +331,20 @@ describe('DELETE /api/categories/:id', () => {
         .delete('/api/categories/1')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect('Content-Type', /json/)
+        .expect(400)
+        .then(resp => {
+          // TODO joi.assert(resp, someSchema);
+        });
+    });
+  });
+
+  context('with valid Authorization and :id and category is empty', () =>{
+
+    it('should respond with an empty body (204)', () => {
+
+      return supertest(app)
+        .delete('/api/categories/11')
+        .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect(204)
         .then(resp => {
           // TODO joi.assert(resp, someSchema);
