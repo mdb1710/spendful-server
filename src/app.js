@@ -45,6 +45,14 @@ app.use('/api/incomes', incomeRouter)
 app.use('/api/expenses', expenseRouter)
 app.use('/api/reports', reportRouter)
 
+app.use(function clientErrorHandler(err, req, res, next) {
+  if (req.xhr) {
+    res.status(500).send({ error: 'Something failed!' });
+  } else {
+    next(err);
+  }
+});
+
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
@@ -52,9 +60,9 @@ app.use(function errorHandler(error, req, res, next) {
     response = { error: { message: 'server error' } };
   } else {
     console.error(error);
-    response = { message: error.message, error };
+    response = { message: error.message, error, clientMessage: { errors: ['Something Went Wrong - Server Error'] } };
   }
-  res.status(500).json(response);
+  res.status(500).json(response.clientMessage);
 });
 
 module.exports = app;
