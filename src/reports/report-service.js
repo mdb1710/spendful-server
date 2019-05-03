@@ -79,10 +79,10 @@ const reportService = {
                   true
                 );
 
-                if (occurences.length) {
-                  // add recurring event to results
+                // add each occurrence of recurring event to results
+                occurences.forEach(o => {
                   list.push(r);
-                }
+                });
 
               } else {
 
