@@ -18,12 +18,6 @@ categoryRouter
                     req.user.id
                 )
 
-            // if(categories.length === 0){
-            //     return res.status(404).json({
-            //         errors: [`No categories found`],
-            //     })
-            // }
-
             res.json(categories)
             next()
         } catch(error) {
@@ -43,7 +37,7 @@ categoryRouter
 
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
-                   return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
+                   return res.status(400).json({errors: [`${fields[i]} is required`]})
                 }
             }
 
@@ -133,7 +127,7 @@ categoryRouter
                     )
 
             if(incomesForCategory || expensesForCategory){
-                return res.status(400).json({ errors: ['Category contains expenses or incomes']})
+                return res.status(400).json({ errors: ['category not empty']})
             }
             await categoryService
                 .deleteCategory(
@@ -165,7 +159,7 @@ async function isCategoryExist(req, res, next){
 
         if(!category){
             return res
-                .status(400)
+                .status(404)
                 .json({errors: [`Category doesn't exist`]})
         }
         res.category = category

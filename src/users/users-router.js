@@ -13,7 +13,7 @@ usersRouter
 
         for(let i=0; i<fields.length; i++){
             if(!req.body[fields[i]]){
-                return res.status(400).json({ errors: [`Missing ${fields[i]} in request body`] })
+                return res.status(400).json({ errors: [`${fields[i]} is required`] })
             }
         }
 
@@ -30,7 +30,7 @@ usersRouter
             const hasUserWithEmail = await userService.getUserbyEmail(req.app.get('db'), newUser.email_address)
 
             if(hasUserWithEmail){
-                return res.status(400).json({errors: ['Email is already taken']})
+                return res.status(400).json({errors: ['email address already in use']})
             }
 
             const hashedPassword = await userService

@@ -11,7 +11,7 @@ reportRouter
             const year = req.params.year
 
             if(isNaN(parseInt(year, 10))){
-                return res.status(404).json({errors: ['Not a number']})
+                return res.status(404).json({errors: ['Invalid year']})
             }
             const incomesForYear = await reportService
                 .getIncomesByYear(
@@ -42,7 +42,7 @@ reportRouter
         const { month, year }= req.params
 
         if(isNaN(parseInt(year, 10)) || isNaN(parseInt(month, 10))){
-            return res.status(404).json({errors: ['Not a number']})
+            return res.status(404).json({errors: ['Invalid year or month']})
         }
 
         try{
