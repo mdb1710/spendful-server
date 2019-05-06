@@ -44,6 +44,24 @@ const userService = {
             .into('users')
             .returning('*')
             .then(([user]) => user)
+            .then((user) => {
+
+                const defaultCategories = [
+                    { owner_id: user.id, name: 'Cash', type: 'income' },
+                    { owner_id: user.id, name: 'Check', type: 'income' },
+                    { owner_id: user.id, name: 'Direct Deposit', type: 'income' },
+                    { owner_id: user.id, name: 'Housing', type: 'expense' },
+                    { owner_id: user.id, name: 'Transportation', type: 'expense' },
+                    { owner_id: user.id, name: 'Food', type: 'expense' },
+                    { owner_id: user.id, name: 'Utilities', type: 'expense' },
+                    { owner_id: user.id, name: 'Entertainment', type: 'expense' },
+                ];
+
+                return db
+                    .insert(defaultCategories)
+                    .into('categories')
+                    .then(() => user);
+            })
     }
 }
 
