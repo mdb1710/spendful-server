@@ -14,12 +14,6 @@ expenseRouter
             const expenses = await expenseService
                 .getAllExpenses(req.app.get('db'), req.user.id)
 
-            // if(expenses.length === 0){
-            //     return res.status(404).json({
-            //         errors: [`No expenses found`],
-            //     })
-            // }
-
             res.json(expenses)
             next()
         } catch(error) {

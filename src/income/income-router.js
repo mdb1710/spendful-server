@@ -14,12 +14,6 @@ incomeRouter
             const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
 
-            // if(!incomes){
-            //     return res.status(404).json({
-            //         errors: [`No incomes found`],
-            //     })
-            // }
-
             res.json(incomes)
             next()
         } catch(error) {
