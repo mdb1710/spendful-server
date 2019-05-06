@@ -5,6 +5,7 @@ const categoryService = {
         return db('categories')
             .select('*')
             .where({owner_id})
+            .orderBy('name');
     },
 
     getCategoryById(db, id, owner_id){
@@ -52,11 +53,12 @@ const categoryService = {
             .select('*')
             .where({category_id})
             .andWhere({owner_id})
+            .orderBy(['start_date', 'description'])
             .then(incomes => {
                 if (incomes.length === 0) {
-                    return false 
+                    return false
                 }
-                return true 
+                return true
             })
     },
 
@@ -65,7 +67,8 @@ const categoryService = {
         .select('*')
         .where({category_id})
         .andWhere({owner_id})
-        .then(expenses => { 
+        .orderBy(['start_date', 'description'])
+        .then(expenses => {
             if (expenses.length === 0){
                 return false
             }

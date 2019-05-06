@@ -5,6 +5,7 @@ const incomeService = {
         return db('incomes')
             .select('*')
             .where({owner_id})
+            .orderBy(['start_date', 'description'])
     },
 
     getIncomeById(db, id, owner_id){
