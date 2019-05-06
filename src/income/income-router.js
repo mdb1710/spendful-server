@@ -34,7 +34,7 @@ incomeRouter
                 recurring_rule
             }
 
-            if (newIncome.recurring_rule === 'ONCE'){
+            if (/once/i.test(newIncome.recurring_rule)){
                 newIncome.recurring_rule = null;
             }
 
