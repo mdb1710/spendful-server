@@ -46,7 +46,7 @@ incomeRouter
 
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
-                   return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
+                   return res.status(400).json({errors: [`${fields[i]} is required`]})
                 }
             }
 
@@ -71,7 +71,7 @@ incomeRouter
         try{
             // console.log(res.income)
             if (!res.income) {
-                return res.status(404).json({ errors: ['income not found'] });
+                return res.status(404).json({ errors: ["Income doesn't exist"] });
             }
             res.json(res.income)
             next()
@@ -97,7 +97,7 @@ incomeRouter
         try{
 
             const schema = Joi.object({
-                category_id: Joi.number(),
+                category_id: Joi.number().label('category'),
                 description: Joi.string(),
                 amount: Joi.number(),
                 start_date: Joi.date(),

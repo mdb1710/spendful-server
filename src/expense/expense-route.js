@@ -45,7 +45,7 @@ expenseRouter
 
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
-                   return res.status(400).json({errors: [`Missing ${fields[i]} in request body`]})
+                   return res.status(400).json({errors: [`${fields[i]} is required`]})
                 }
             }
 
@@ -93,13 +93,13 @@ expenseRouter
     .patch(bodyParser, async(req, res, next) => {
         try{
             const schema = Joi.object({
-                category_id: Joi.number(),
+                category_id: Joi.number().label('category'),
                 description: Joi.string(),
                 amount: Joi.number(),
                 start_date: Joi.date(),
                 end_date: Joi.date().allow(null),
                 recurring_rule: Joi.alternatives().try([
-                    Joi.string().regex(/\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bDAILY\b/),
+                    Joi.string().regex(/\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bBIWEEKLY\b/),
                     Joi.allow(null)
                 ])
             })
