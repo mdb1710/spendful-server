@@ -18,12 +18,6 @@ categoryRouter
                     req.user.id
                 )
 
-            // if(categories.length === 0){
-            //     return res.status(404).json({
-            //         errors: [`No categories found`],
-            //     })
-            // }
-
             res.json(categories)
             next()
         } catch(error) {
