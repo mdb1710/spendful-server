@@ -34,12 +34,33 @@ const createRRule = function (startDate, frequency, endDate = null) {
   return new RRule(options);
 };
 
+const sortCombinedList = function (a, b) {
+
+  // -1, A comes before B
+  //  1, B comes before A
+  //  0, A and B are equal
+
+  const startA = new Date(a.start_date);
+  const startB = new Date(b.start_date);
+
+  // Sort by start_date
+  if (startA < startB) { return -1; }
+  if (startA > startB) { return  1; }
+
+  // Sort by description
+  if (a.description < b.description) { return -1; }
+  if (a.description > b.description) { return  1; }
+
+  return 0;
+};
+
 const reportService = {
   getIncomesByYear(db, year, owner_id){
     return db('incomes')
       .select('*')
       .where({owner_id})
       .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
+      .orderBy(['start_date', 'description'])
   },
 
   getIncomesByYearAndMonth(db, year, month, owner_id){
@@ -50,6 +71,7 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
+      .orderBy(['start_date', 'description'])
       .then(nonRecurringEvents => {
 
 
@@ -57,6 +79,7 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
+          .orderBy(['start_date', 'description'])
           .then(recurringEvents => {
 
             const list = [];
@@ -93,6 +116,10 @@ const reportService = {
 
             return  nonRecurringEvents.concat(list);
           });
+      })
+      .then(combinedLists => {
+
+        return combinedLists.sort(sortCombinedList);
       });
   },
 
@@ -101,6 +128,7 @@ const reportService = {
       .select('*')
       .where({owner_id})
       .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
+      .orderBy(['start_date', 'description'])
   },
 
   getExpensesByYearAndMonth(db, year, month, owner_id){
@@ -110,6 +138,7 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
+      .orderBy(['start_date', 'description'])
       .then(nonRecurringEvents => {
 
 
@@ -117,6 +146,7 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
+          .orderBy(['start_date', 'description'])
           .then(recurringEvents => {
 
             const list = [];
@@ -153,6 +183,10 @@ const reportService = {
 
             return  nonRecurringEvents.concat(list);
           });
+      })
+      .then(combinedLists => {
+
+        return combinedLists.sort(sortCombinedList);
       });
   },
 }
