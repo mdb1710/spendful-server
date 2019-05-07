@@ -2,6 +2,7 @@ const express = require('express')
 const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
 const categoryService = require('./category-service')
+const xss = require('xss')
 
 const categoryRouter = express.Router()
 const bodyParser = express.json()
@@ -18,7 +19,14 @@ categoryRouter
                     req.user.id
                 )
 
-            res.json(categories)
+            const clean = categories.map(c => {
+
+                c.name = xss(c.name);
+                c.type = xss(c.type);
+                return c;
+            });
+
+            res.json(clean)
             next()
         } catch(error) {
             next(error)
@@ -72,6 +80,8 @@ categoryRouter
     .all(isCategoryExist)
     .get(async(req, res, next) => {
         try{
+            res.category.name = xss(res.category.name);
+            res.category.type = xss(res.category.type);
             res.json(res.category)
             next()
         }catch(error){

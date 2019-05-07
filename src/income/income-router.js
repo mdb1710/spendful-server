@@ -2,6 +2,7 @@ const express = require('express')
 const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
 const incomeService = require('./income-service')
+const xss = require('xss')
 
 const incomeRouter = express.Router()
 const bodyParser = express.json()
@@ -14,7 +15,14 @@ incomeRouter
             const incomes = await incomeService
                 .getAllIncomes(req.app.get('db'), req.user.id)
 
-            res.json(incomes)
+                const clean = incomes.map(i => {
+
+                    i.description    = xss(i.description);
+                    i.recurring_rule = xss(i.recurring_rule);
+                    return i;
+                });
+
+            res.json(clean)
             next()
         } catch(error) {
             next(error)
@@ -67,6 +75,10 @@ incomeRouter
             if (!res.income) {
                 return res.status(404).json({ errors: ["Income doesn't exist"] });
             }
+
+            res.income.description    = xss(res.income.description);
+            res.income.recurring_rule = xss(res.income.recurring_rule);
+
             res.json(res.income)
             next()
         }catch(error){

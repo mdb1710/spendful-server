@@ -2,6 +2,7 @@ const express = require('express')
 const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
 const expenseService = require('./expense-service')
+const xss = require('xss')
 
 const expenseRouter = express.Router()
 const bodyParser = express.json()
@@ -14,7 +15,14 @@ expenseRouter
             const expenses = await expenseService
                 .getAllExpenses(req.app.get('db'), req.user.id)
 
-            res.json(expenses)
+            const clean = expenses.map(e => {
+
+                e.description    = xss(e.description);
+                e.recurring_rule = xss(e.recurring_rule);
+                return e;
+            });
+
+            res.json(clean)
             next()
         } catch(error) {
             next(error)
@@ -65,6 +73,9 @@ expenseRouter
     .all(isExpenseExist)
     .get(async(req, res, next) => {
         try{
+            res.expense.description    = xss(res.expense.description);
+            res.expense.recurring_rule = xss(res.expense.recurring_rule);
+
             res.json(res.expense)
             next()
         }catch(error){
