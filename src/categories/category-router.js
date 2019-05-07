@@ -127,7 +127,7 @@ categoryRouter
                     )
 
             if(incomesForCategory || expensesForCategory){
-                return res.status(400).json({ errors: ['category not empty']})
+                return res.status(400).json({ errors: ['Category not empty']})
             }
             await categoryService
                 .deleteCategory(
