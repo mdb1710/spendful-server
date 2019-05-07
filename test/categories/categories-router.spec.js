@@ -2,14 +2,14 @@
 'use strict';
 const joi = require('@hapi/joi');
 const knex = require('knex');
-const { PORT, DB_URL } = require('../../src/config');
+const { PORT, TEST_DB_URL } = require('../../src/config');
 const app = require('../../src/app');
 
 before(() => {
 
   const db = knex({
     client: 'pg',
-    connection: DB_URL
+    connection: TEST_DB_URL
   });
 
   app.set('db', db);
