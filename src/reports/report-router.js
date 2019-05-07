@@ -2,6 +2,7 @@
 const express = require('express')
 const { requireAuth } = require('../middleware/jwt-auth')
 const reportService = require('./report-service')
+const xss = require('xss')
 
 const reportRouter = express.Router()
 
@@ -20,6 +21,13 @@ reportRouter
                     req.user.id
                 )
 
+            const cleanIncomes = incomesForYear.map(i => {
+
+                i.description    = xss(i.description);
+                i.recurring_rule = xss(i.recurring_rule);
+                return i;
+            });
+
             const expensesForYear = await reportService
                 .getExpensesByYear(
                     req.app.get('db'),
@@ -27,9 +35,16 @@ reportRouter
                     req.user.id
                 )
 
+                const cleanExpenses = expensesForYear.map(e => {
+
+                    e.description    = xss(e.description);
+                    e.recurring_rule = xss(e.recurring_rule);
+                    return e;
+                });
+
             res.json({
-                incomes: incomesForYear,
-                expenses: expensesForYear
+                incomes: cleanIncomes,
+                expenses: cleanExpenses,
             })
             next()
         }catch(error){
