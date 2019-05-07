@@ -7,7 +7,7 @@ const userService = {
         const schema = Joi.object({
             email_address: Joi.string().email().required(),
             full_name: Joi.string().required(),
-            password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/).required(),
+            password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).required(),
         })
 
         const response = Joi.validate(newUser, schema, {abortEarly: false})
