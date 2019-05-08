@@ -56,11 +56,72 @@ const sortCombinedList = function (a, b) {
 
 const reportService = {
   getIncomesByYear(db, year, owner_id){
+
     return db('incomes')
       .select('*')
-      .where({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
+      .andWhere({owner_id})
+      .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
+      .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
+      .then(nonRecurringEvents => {
+
+
+        return db('incomes')
+          .select('*')
+          .where({owner_id})
+          .whereNotNull('recurring_rule')
+          .orderBy(['start_date', 'description'])
+          .then(recurringEvents => {
+
+            const list = [];
+
+            recurringEvents.forEach(r => {
+
+              if (r.recurring_rule && r.start_date) {
+
+                const start = new Date(r.start_date);
+                const end = (r.end_date) ? new Date(r.end_date) : null;
+
+                const rule = createRRule(start, r.recurring_rule, end);
+
+                const firstDayOfYear = DateTime.fromObject({ year: year, month: 1, day: 1, zone: 'UTC' });
+                const lastDayOfYear  = firstDayOfYear.plus({ years: 1 }).minus({ days: 1 });
+
+                const occurences = rule.between(
+                  firstDayOfYear.toJSDate(),
+                  lastDayOfYear.toJSDate(),
+                  true
+                );
+
+                // add each occurrence of recurring event to results
+                occurences.forEach(o => {
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
+                });
+
+              } else {
+
+                // add non-recurring event to results
+                list.push(r);
+              }
+            });
+
+            return  nonRecurringEvents.concat(list);
+          });
+      })
+      .then(combinedLists => {
+
+        return combinedLists.sort(sortCombinedList);
+      });
   },
 
   getIncomesByYearAndMonth(db, year, month, owner_id){
@@ -72,6 +133,14 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
       .then(nonRecurringEvents => {
 
 
@@ -104,7 +173,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
@@ -124,14 +195,75 @@ const reportService = {
   },
 
   getExpensesByYear(db, year, owner_id){
+
     return db('expenses')
       .select('*')
-      .where({owner_id})
-      .andWhere(db.raw('cast(EXTRACT(Year from start_date) as integer)'), year)
+      .andWhere({owner_id})
+      .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
+      .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
+      .then(nonRecurringEvents => {
+
+        return db('expenses')
+          .select('*')
+          .where({owner_id})
+          .whereNotNull('recurring_rule')
+          .orderBy(['start_date', 'description'])
+          .then(recurringEvents => {
+
+            const list = [];
+
+            recurringEvents.forEach(r => {
+
+              if (r.recurring_rule && r.start_date) {
+
+                const start = new Date(r.start_date);
+                const end = (r.end_date) ? new Date(r.end_date) : null;
+
+                const rule = createRRule(start, r.recurring_rule, end);
+
+                const firstDayOfYear = DateTime.fromObject({ year: year, month: 1, day: 1, zone: 'UTC' });
+                const lastDayOfYear  = firstDayOfYear.plus({ years: 1 }).minus({ days: 1 });
+
+                const occurences = rule.between(
+                  firstDayOfYear.toJSDate(),
+                  lastDayOfYear.toJSDate(),
+                  true
+                );
+
+                // add each occurrence of recurring event to results
+                occurences.forEach(o => {
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
+                });
+
+              } else {
+
+                // add non-recurring event to results
+                list.push(r);
+              }
+            });
+
+            return  nonRecurringEvents.concat(list);
+          });
+      })
+      .then(combinedLists => {
+
+        return combinedLists.sort(sortCombinedList);
+      });
   },
 
   getExpensesByYearAndMonth(db, year, month, owner_id){
+
     return db('expenses')
       .select('*')
       .andWhere({owner_id})
@@ -139,6 +271,14 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
       .then(nonRecurringEvents => {
 
 
@@ -171,7 +311,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
