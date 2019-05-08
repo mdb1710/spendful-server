@@ -44,12 +44,12 @@ const sortCombinedList = function (a, b) {
   const dateB = new Date(b.occurrence_date);
 
   // Sort by occurrence_date
-  if (dateA < dateB) { return -1; }
-  if (dateA > dateB) { return  1; }
+  if (dateA > dateB) { return -1; }
+  if (dateA < dateB) { return  1; }
 
   // Sort by description
-  if (a.description < b.description) { return -1; }
-  if (a.description > b.description) { return  1; }
+  if (a.description > b.description) { return -1; }
+  if (a.description < b.description) { return  1; }
 
   return 0;
 };
