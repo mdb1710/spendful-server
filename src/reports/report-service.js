@@ -44,8 +44,8 @@ const sortCombinedList = function (a, b) {
   const startB = new Date(b.start_date);
 
   // Sort by start_date
-  if (startA < startB) { return -1; }
-  if (startA > startB) { return  1; }
+  if (startA > startB) { return -1; }
+  if (startA < startB) { return  1; }
 
   // Sort by description
   if (a.description < b.description) { return -1; }
