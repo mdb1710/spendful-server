@@ -7,7 +7,10 @@ const userService = {
         const schema = Joi.object({
             email_address: Joi.string().email().required(),
             full_name: Joi.string().required(),
-            password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).required(),
+            password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).required().error(
+                () => { return 'Password must be 8-30 characters long and contain at least one uppercase letter, at least one lowercase letter, and at least one number.'; },
+                { self: true }
+            ),
         })
 
         const response = Joi.validate(newUser, schema, {abortEarly: false})
