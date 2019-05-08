@@ -5,7 +5,7 @@ const expenseService = {
         return db('expenses')
             .select('*')
             .where({owner_id})
-            .orderBy(['start_date', 'description']);
+            .orderBy([{column: 'start_date', order: 'desc'}, {column: 'description', order: 'asc'}]);
     },
 
     getExpenseById(db, id, owner_id){
