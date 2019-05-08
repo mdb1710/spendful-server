@@ -63,6 +63,14 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
       .then(nonRecurringEvents => {
 
 
@@ -95,7 +103,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
@@ -123,6 +133,14 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
       .then(nonRecurringEvents => {
 
 
@@ -155,7 +173,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
@@ -182,8 +202,15 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
-      .then(nonRecurringEvents => {
+      .then(noOccurrenceDates => {
 
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
+      .then(nonRecurringEvents => {
 
         return db('expenses')
           .select('*')
@@ -214,7 +241,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
@@ -242,6 +271,14 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
       .orderBy(['start_date', 'description'])
+      .then(noOccurrenceDates => {
+
+        // Add occurrence_date to non-recurring events
+        return noOccurrenceDates.map(row => {
+          row.occurrence_date = row.start_date;
+          return row;
+        });
+      })
       .then(nonRecurringEvents => {
 
 
@@ -274,7 +311,9 @@ const reportService = {
 
                 // add each occurrence of recurring event to results
                 occurences.forEach(o => {
-                  list.push(r);
+                  const copy = { ...r };
+                  copy.occurrence_date = o.toISOString();
+                  list.push(copy);
                 });
 
               } else {
