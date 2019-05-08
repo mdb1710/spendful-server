@@ -40,12 +40,12 @@ const sortCombinedList = function (a, b) {
   //  1, B comes before A
   //  0, A and B are equal
 
-  const startA = new Date(a.start_date);
-  const startB = new Date(b.start_date);
+  const dateA = new Date(a.occurrence_date);
+  const dateB = new Date(b.occurrence_date);
 
-  // Sort by start_date
-  if (startA < startB) { return -1; }
-  if (startA > startB) { return  1; }
+  // Sort by occurrence_date
+  if (dateA < dateB) { return -1; }
+  if (dateA > dateB) { return  1; }
 
   // Sort by description
   if (a.description < b.description) { return -1; }
@@ -62,7 +62,10 @@ const reportService = {
       .andWhere({owner_id})
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .whereNull('recurring_rule')
-      .orderBy(['start_date', 'description'])
+      .orderBy([
+        { column: 'start_date',  order: 'desc' },
+        { column: 'description', order: 'asc' }
+      ])
       .then(noOccurrenceDates => {
 
         // Add occurrence_date to non-recurring events
@@ -78,7 +81,10 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
-          .orderBy(['start_date', 'description'])
+          .orderBy([
+            { column: 'start_date',  order: 'desc' },
+            { column: 'description', order: 'asc' }
+          ])
           .then(recurringEvents => {
 
             const list = [];
@@ -132,7 +138,10 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
-      .orderBy(['start_date', 'description'])
+      .orderBy([
+        { column: 'start_date',  order: 'desc' },
+        { column: 'description', order: 'asc' }
+      ])
       .then(noOccurrenceDates => {
 
         // Add occurrence_date to non-recurring events
@@ -148,7 +157,10 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
-          .orderBy(['start_date', 'description'])
+          .orderBy([
+            { column: 'start_date',  order: 'desc' },
+            { column: 'description', order: 'asc' }
+          ])
           .then(recurringEvents => {
 
             const list = [];
@@ -201,7 +213,10 @@ const reportService = {
       .andWhere({owner_id})
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .whereNull('recurring_rule')
-      .orderBy(['start_date', 'description'])
+      .orderBy([
+        { column: 'start_date',  order: 'desc' },
+        { column: 'description', order: 'asc' }
+      ])
       .then(noOccurrenceDates => {
 
         // Add occurrence_date to non-recurring events
@@ -216,7 +231,10 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
-          .orderBy(['start_date', 'description'])
+          .orderBy([
+            { column: 'start_date',  order: 'desc' },
+            { column: 'description', order: 'asc' }
+          ])
           .then(recurringEvents => {
 
             const list = [];
@@ -270,7 +288,10 @@ const reportService = {
       .andWhere(db.raw('cast(EXTRACT(YEAR from start_date) as integer)'), year)
       .andWhere(db.raw('cast(EXTRACT(MONTH from start_date) as integer)'), month)
       .whereNull('recurring_rule')
-      .orderBy(['start_date', 'description'])
+      .orderBy([
+        { column: 'start_date',  order: 'desc' },
+        { column: 'description', order: 'asc' }
+      ])
       .then(noOccurrenceDates => {
 
         // Add occurrence_date to non-recurring events
@@ -286,7 +307,10 @@ const reportService = {
           .select('*')
           .where({owner_id})
           .whereNotNull('recurring_rule')
-          .orderBy(['start_date', 'description'])
+          .orderBy([
+            { column: 'start_date',  order: 'desc' },
+            { column: 'description', order: 'asc' }
+          ])
           .then(recurringEvents => {
 
             const list = [];
