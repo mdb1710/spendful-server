@@ -1,9 +1,12 @@
 /* global expect supertest*/
+
 'use strict';
-const joi = require('@hapi/joi');
-const knex = require('knex');
-const { PORT, TEST_DB_URL } = require('../../src/config');
-const app = require('../../src/app');
+
+const joi             = require('@hapi/joi');
+const knex            = require('knex');
+const { TEST_DB_URL } = require('../../src/config');
+const app             = require('../../src/app');
+const db              = require('../helpers/database');
 
 before(() => {
 
@@ -15,10 +18,17 @@ before(() => {
   app.set('db', db);
 });
 
+beforeEach(() => {
+  return db.createDatabase();
+});
+
+afterEach(() => {
+  return db.destroyDatabase();
+});
+
 after(() => {
   app.get('db').destroy();
 });
-
 describe('GET /api/categories', () => {
 
   context('with invalid Authorization', () =>{
@@ -343,7 +353,7 @@ describe('DELETE /api/categories/:id', () => {
     it('should respond with an empty body (204)', () => {
 
       return supertest(app)
-        .delete('/api/categories/11')
+        .delete('/api/categories/18')
         .set('Authorization', `Bearer ${VALID_AUTH_TOKEN}`)
         .expect(204)
         .then(resp => {
