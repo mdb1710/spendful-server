@@ -46,6 +46,11 @@ expenseRouter
                 newExpense.recurring_rule = null;
             }
 
+            // end_date cannot be before start date, but it can be null
+            if (newExpense.end_date && new Date(newExpense.end_date) < new Date(newExpense.start_date)) {
+                return res.status(400).json({ errors: ['end date cannot be earlier than start date'] });
+            }
+
             for(let i=0; i<fields.length; i++){
                 if(!req.body[fields[i]]){
                    return res.status(400).json({errors: [`${fields[i]} is required`]})
@@ -103,7 +108,10 @@ expenseRouter
                 description: Joi.string(),
                 amount: Joi.number(),
                 start_date: Joi.date(),
-                end_date: Joi.date().allow(null),
+                end_date: Joi.date().min(Joi.ref('start_date')).allow(null).error(
+                    () => { return 'end date cannot be earlier than start date'; },
+                    { self: true }
+                ),
                 recurring_rule: Joi.alternatives().try([
                     Joi.string().regex(/\bYEARLY\b|\bMONTHLY\b|\bWEEKLY\b|\bBIWEEKLY\b/),
                     Joi.allow(null)
