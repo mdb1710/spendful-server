@@ -25,7 +25,7 @@ VALUES
       -- password = 'rogersisweak'
       '$2y$12$q0r2E7xxZJT66HT5zb6yoeemlVUYy400SsXh3XRBNIJb1zuuuHhKu'
   ),
-  (  
+  (
       4,
      'Demo User',
      'demo@spendful.com',
@@ -155,9 +155,16 @@ INSERT INTO "categories" ("id", "owner_id", "name", "type", "monthly_budget")
         'Utilities',
         'expense',
         500.00
+    ),
+    (
+        18,
+        1,
+        'Example Empty Category',
+        'expense',
+        1000.00
     );
 
-ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 18;
+ALTER SEQUENCE IF EXISTS categories_id_seq RESTART WITH 19;
 
 INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount", "start_date", "recurring_rule")
   VALUES
@@ -202,8 +209,8 @@ INSERT INTO "incomes" ("id", "owner_id", "category_id", "description", "amount",
         4,
         11,
         'E-Bay',
-        250.00, 
-        make_timestamptz(2019, 5, 8, 0, 0, 0), 
+        250.00,
+        make_timestamptz(2019, 5, 8, 0, 0, 0),
         null
     ),
     (
@@ -354,7 +361,7 @@ INSERT INTO "expenses" ("id", "owner_id", "category_id", "description", "amount"
         300.00,
         make_timestamptz(2019, 5, 9, 0, 0, 0),
         'monthly'
-    ); 
+    );
 
 
 ALTER SEQUENCE IF EXISTS expenses_id_seq RESTART WITH 15;
