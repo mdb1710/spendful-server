@@ -2,10 +2,11 @@
 
 'use strict';
 
-const joi        = require('@hapi/joi');
-const knex       = require('knex');
+const joi             = require('@hapi/joi');
+const knex            = require('knex');
 const { TEST_DB_URL } = require('../../src/config');
-const app        = require('../../src/app');
+const app             = require('../../src/app');
+const db              = require('../helpers/database');
 
 before(() => {
 
@@ -15,6 +16,14 @@ before(() => {
   });
 
   app.set('db', db);
+});
+
+beforeEach(() => {
+  return db.createDatabase();
+});
+
+afterEach(() => {
+  return db.destroyDatabase();
 });
 
 after(() => {

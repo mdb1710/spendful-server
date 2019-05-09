@@ -2,10 +2,11 @@
 
 'use strict';
 
-const joi        = require('@hapi/joi');
-const knex       = require('knex');
+const joi             = require('@hapi/joi');
+const knex            = require('knex');
 const { TEST_DB_URL } = require('../../src/config');
-const app        = require('../../src/app');
+const app             = require('../../src/app');
+const db              = require('../helpers/database');
 
 before(() => {
 
@@ -15,6 +16,14 @@ before(() => {
   });
 
   app.set('db', db);
+});
+
+beforeEach(() => {
+  return db.createDatabase();
+});
+
+afterEach(() => {
+  return db.destroyDatabase();
 });
 
 after(() => {
@@ -121,7 +130,7 @@ describe('POST /api/users', () => {
           // FIXME using Date.now() is a hack because we aren't currently
           // seeding and un-seeding a test database yet
           email_address : `jdoe${Date.now()}@anon.com`,
-          password      : 'LongerPassword',
+          password      : 'LongerPassword2',
         })
         .expect('Content-Type', /json/)
         .expect(201)

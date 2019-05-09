@@ -2,25 +2,33 @@
 
 'use strict';
 
-const joi        = require('@hapi/joi');
-const knex       = require('knex');
-const { DB_URL } = require('../../src/config');
-const app        = require('../../src/app');
+const joi             = require('@hapi/joi');
+const knex            = require('knex');
+const { TEST_DB_URL } = require('../../src/config');
+const app             = require('../../src/app');
+const db              = require('../helpers/database');
 
 before(() => {
 
   const db = knex({
     client: 'pg',
-    connection: DB_URL
+    connection: TEST_DB_URL
   });
 
   app.set('db', db);
 });
 
+beforeEach(() => {
+  return db.createDatabase();
+});
+
+afterEach(() => {
+  return db.destroyDatabase();
+});
+
 after(() => {
   app.get('db').destroy();
 });
-
 
 describe('POST /api/auth/login', () => {
 
