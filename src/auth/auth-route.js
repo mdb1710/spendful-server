@@ -16,7 +16,6 @@ authRouter
         }
 
         try {
-            // console.log(req.app.get('db'))
             const user =  await AuthService
                 .getUserbyUserEmail(req.app.get('db'), loginUser.email_address)
 

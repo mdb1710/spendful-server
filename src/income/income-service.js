@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 
 const incomeService = {
   getAllIncomes(db, owner_id){
@@ -14,7 +14,6 @@ const incomeService = {
       .where({id})
       .andWhere({owner_id})
       .first();
-    // .then(res => console.log(res))
   },
 
   insertIncome(db, income){
