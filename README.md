@@ -104,7 +104,9 @@ Deployed via Heroku
 
 ## Local dev setup
 
-Set-up .env file with 
+Set-up .env file with
+
+```
 NODE_ENV=
 PORT=
 DB_MIGRATION_USER= 
@@ -116,6 +118,7 @@ DATBASE_URL=
 TEST_DB_URL=
 JWT_SECRET=
 JWT_EXPIRY=
+```
 
 
 If using user `postgres`:
