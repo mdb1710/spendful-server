@@ -7,8 +7,16 @@ process.env.NODE_ENV = 'test';
 
 const { expect } = require('chai');
 const supertest = require('supertest');
+const jwt = require('jsonwebtoken');
 
 global.expect = expect;
 global.supertest = supertest;
 
-global.VALID_AUTH_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJmdWxsX25hbWUiOiJTcGVuZGZ1bCBBZG1pbiJ9.ylf7unVD3FDiLV2EdW2S3ddWlTixrbuorSm29HwaBDE';
+// Create a JWT that never expires
+
+const payload = {
+  user_id: 1,
+  full_name: 'Spendful Admin',
+};
+
+global.VALID_AUTH_TOKEN = jwt.sign(payload, process.env.JWT_SECRET);
