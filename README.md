@@ -3,6 +3,7 @@
 Michael Bonner, Ethan Zimmerman, Andre Willie, Zoljargal Fallows, and Chris Carnivale
 
 [LiveApp](http://spendful.now.sh)
+
 [Client Repo](https://github.com/thinkful-ei-armadillo/spendful-client)
 
 ## Summary
@@ -28,7 +29,7 @@ Handles registration/sign-up
 ### Categories Endpoints
 
 ##### `get /api/categories`
-Retrieves all categories for user and default categories for new users
+Retrieves all categories for user
 
 ##### `post /api/categories`
 Allows user to add new categories
@@ -40,7 +41,7 @@ Retrieves single category based on id provided
 Allows user to make changes to a category based on id provided
 
 ##### `delete /api/categories/id`
-Allows user to delete a category based on id provided
+Allows user to delete a catgory based on id provided
 
 ### Expense Endpoints
 
@@ -104,9 +105,7 @@ Deployed via Heroku
 
 ## Local dev setup
 
-Set-up .env file with
-
-```
+Set-up .env file with 
 NODE_ENV=
 PORT=
 DB_MIGRATION_USER= 
@@ -118,7 +117,6 @@ DATBASE_URL=
 TEST_DB_URL=
 JWT_SECRET=
 JWT_EXPIRY=
-```
 
 
 If using user `postgres`:
