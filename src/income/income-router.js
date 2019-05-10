@@ -76,7 +76,6 @@ incomeRouter
     .all(isIncomeExist)
     .get(async(req, res, next) => {
         try{
-            // console.log(res.income)
             if (!res.income) {
                 return res.status(404).json({ errors: ["Income doesn't exist"] });
             }
