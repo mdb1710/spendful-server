@@ -40,7 +40,7 @@ Retrieves single category based on id provided
 Allows user to make changes to a category based on id provided
 
 ##### `delete /api/categories/id`
-Allows user to delete a catgory based on id provided
+Allows user to delete a category based on id provided
 
 ### Expense Endpoints
 
