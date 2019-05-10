@@ -12,7 +12,7 @@ add all of your incomes and expenses and visualize them through convenient chart
 front-end utilizes React to create a responsive design.  The back-end leverages the RRule library to allow
 for recurring expenses.
 
-##Endpoints
+## Endpoints
 
 ### Authorization/User Endpoints
 
