@@ -1,3 +1,5 @@
+'use strict'
+
 const express = require('express')
 const Joi = require('@hapi/joi')
 const { requireAuth } = require('../middleware/jwt-auth')
