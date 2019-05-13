@@ -1,3 +1,5 @@
+'use strict'; 
+
 const express = require('express')
 const userService = require('./users-service')
 const path = require('path')
